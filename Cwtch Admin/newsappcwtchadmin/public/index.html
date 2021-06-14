@@ -41,6 +41,22 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <script>
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+            apiKey: "AIzaSyBeagiCj1g8Tpaup8EtD3nwRbUBHIvAyZc",
+            authDomain: "cwtch-news.firebaseapp.com",
+            projectId: "cwtch-news",
+            storageBucket: "cwtch-news.appspot.com",
+            messagingSenderId: "350416576934",
+            appId: "1:350416576934:web:4fb7e356887c4d9f0baf67",
+            measurementId: "G-1RB34ZW7PP"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+    </script>
 </body>
 
 </html>

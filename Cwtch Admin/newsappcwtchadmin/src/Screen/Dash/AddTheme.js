@@ -1,11 +1,15 @@
-import React from 'react';
+
+import React,{useState} from 'react'
+import {Form,Col,Row,Image} from 'react-bootstrap'
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import Alert from '@material-ui/lab/Alert';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
@@ -20,7 +24,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './listitems';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import {Form} from 'react-bootstrap'
+import LinearProgress from '@material-ui/core/LinearProgress';
 import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
@@ -34,6 +38,9 @@ import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+
+import firebase from 'firebase'
+import 'firebase/storage'
 
 function Copyright() {
   return (
@@ -53,6 +60,9 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+    '& > * + *': {
+        marginTop: theme.spacing(2),
+      },
   },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
@@ -138,7 +148,123 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+var firebaseConfig = {
+    apiKey: "AIzaSyBeagiCj1g8Tpaup8EtD3nwRbUBHIvAyZc",
+    authDomain: "cwtch-news.firebaseapp.com",
+    projectId: "cwtch-news",
+    storageBucket: "cwtch-news.appspot.com",
+    messagingSenderId: "350416576934",
+    appId: "1:350416576934:web:4fb7e356887c4d9f0baf67",
+    measurementId: "G-1RB34ZW7PP"
+  };
+
+  // Initialize Firebase
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+ }else {
+    firebase.app(); // if already initialized, use that one
+ }
+
+
+
+
+
+
+
 export default function AddTheme() {
+
+
+    const [thmeTitle, setthmeTitle] = useState('');
+    const [progress, setProgress] = useState(false);
+    const [showFile, setshowFile] = useState(true)
+
+    const [logourl, setlogourl] = useState('');
+
+
+    const [logo, setlogo] = useState(null);
+
+
+    const handleThemeLogo = (e) => {
+        setlogo(e.target.files[0])
+    }
+
+    const handleThemeTitle = (event) => {
+        setthmeTitle(event.target.value);
+    }
+
+    const uploadPic = (e) => {
+        e.preventDefault();
+        setProgress(true)
+        setshowFile(false)
+        let file = logo;
+        var storage = firebase.storage();
+        var storageRef = storage.ref();
+        var uploadTask = storageRef.child(`theme/logo/${file.name}`).put(file);
+
+        uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+            (snapshot) =>{
+              var progress = Math.round((snapshot.bytesTransferred/snapshot.totalBytes))*100
+
+            },(error) =>{
+              throw error
+            },() =>{
+              // uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) =>{
+        
+              uploadTask.snapshot.ref.getDownloadURL().then((url) =>{
+                setlogourl(url)
+                setProgress(false)
+              })
+        
+           }
+         ) 
+    }
+
+    const onSubmitTheme = (e) => {
+        e.preventDefault();    
+        console.log("Here");
+
+        if(thmeTitle.length <= 1 && !logourl){
+            return(
+<Alert severity="warning">Fill all fields</Alert>
+            )
+        }
+
+
+        firebase.database().ref(`/theme/${thmeTitle}`).set(
+            {
+                title: thmeTitle,
+                logo: logourl
+            }
+        ).then(() => {
+            setthmeTitle('')
+            setlogourl('')
+            setlogo(null)
+            console.log("Done");
+            return <Alert severity="success">Done</Alert>
+        }).catch(err => {
+            console.log(err)
+        })
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -148,6 +274,10 @@ export default function AddTheme() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+
+
+
 
   return (
     <div className={classes.root}>
@@ -242,17 +372,47 @@ export default function AddTheme() {
           helperText="Theme title is important"
           fullWidth
           margin="normal"
+          onChange={handleThemeTitle}
+          value={thmeTitle}
           InputLabelProps={{
             shrink: true,
           }}
           variant="outlined"
         />
         <div style={{marginLeft:200,marginTop:50}}>
-        <Form>
+
+            {showFile ? (
+<div>
+<Form>
   <Form.Group>
-    <Form.File id="exampleFormControlFile1" label="Upload the logo for Theme" />
+    <Form.File type="file" id="file" label="Upload the logo for Theme" onChange={handleThemeLogo}/>
   </Form.Group>
 </Form>
+<Button variant="contained" color="secondary" onClick={uploadPic}>
+  Upload
+</Button>
+    </div>
+            ) : (
+               (progress && !showFile) ? (
+                <LinearProgress />
+
+               ) : (
+                    <div>
+                        <Alert severity="success">Logo upload done</Alert>
+                        </div>
+               )
+
+               
+            )
+
+            }
+ 
+        </div>
+
+        <div style={{marginLeft:500,marginTop:60}}>
+        <Button variant="contained" color="primary"  onClick={onSubmitTheme}>
+  Upload
+</Button>
         </div>
                     </div>
             </div>
