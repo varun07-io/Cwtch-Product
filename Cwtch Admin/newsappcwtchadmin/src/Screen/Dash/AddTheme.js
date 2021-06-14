@@ -1,7 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
@@ -19,6 +18,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './listitems';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import {Form} from 'react-bootstrap'
 import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
@@ -80,6 +82,15 @@ const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: 36,
   },
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: '25ch',
+  },
   menuButtonHidden: {
     display: 'none',
   },
@@ -127,7 +138,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard() {
+export default function AddTheme() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -216,36 +227,36 @@ export default function Dashboard() {
 
 
         <Divider />
-        <List>{secondaryListItems}</List>
+       
       </Drawer>
-      <main className={classes.content}>
+
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            {/* Chart */}
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <Chart />
-              </Paper>
-            </Grid>
-            {/* Recent Deposits */}
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-                <Deposits />
-              </Paper>
-            </Grid>
-            {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Orders />
-              </Paper>
-            </Grid>
-          </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
-        </Container>
-      </main>
+
+            <div className={classes.root} style={{marginTop:100}}>
+                <div>
+        <TextField
+          id="outlined-full-width"
+          label="Enter the Theme Title"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="Theme title"
+          helperText="Theme title is important"
+          fullWidth
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        <div style={{marginLeft:200,marginTop:50}}>
+        <Form>
+  <Form.Group>
+    <Form.File id="exampleFormControlFile1" label="Upload the logo for Theme" />
+  </Form.Group>
+</Form>
+        </div>
+                    </div>
+            </div>
+
     </div>
   );
 }
