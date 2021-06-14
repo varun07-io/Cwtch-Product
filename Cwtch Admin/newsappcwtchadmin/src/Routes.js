@@ -7,6 +7,7 @@ import { BrowserRouter,Switch, Route } from 'react-router-dom';
 import Home from './Screen/Home';
 import Dashboard from './Screen/Dash/Dashboard';
 import AddTheme from './Screen/Dash/AddTheme';
+import AddSuggestionTopics from './Screen/Dash/AddSuggestionTopics';
 
 const Routes = () => {
 
@@ -16,6 +17,8 @@ const Routes = () => {
 
                     <Route exact path="/" component={Dashboard}/>
                     <Route exact path="/addt" component={AddTheme}/>
+                    <Route exact path="/adds" component={AddSuggestionTopics}/>
+
 
 
 

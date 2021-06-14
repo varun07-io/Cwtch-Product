@@ -173,7 +173,7 @@ var firebaseConfig = {
 
 
 
-export default function AddTheme() {
+export default function AddSuggestionTopics() {
 
 
     const [thmeTitle, setthmeTitle] = useState('');
@@ -201,7 +201,7 @@ export default function AddTheme() {
         let file = logo;
         var storage = firebase.storage();
         var storageRef = storage.ref();
-        var uploadTask = storageRef.child(`theme/logo/${file.name}`).put(file);
+        var uploadTask = storageRef.child(`suggested/logo/${file.name}`).put(file);
 
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
             (snapshot) =>{
@@ -232,7 +232,7 @@ export default function AddTheme() {
         }
 
 
-        firebase.database().ref(`/theme/${thmeTitle}`).set(
+        firebase.database().ref(`/suggested/${thmeTitle}`).set(
             {
                 title: thmeTitle,
                 logo: logourl
@@ -339,14 +339,13 @@ export default function AddTheme() {
 </Link>
 </List>
 <List>
-<Link to="/adds">
+
 <ListItem button>
 <ListItemIcon>
 <DashboardIcon />
 </ListItemIcon>
 <ListItemText primary="Add Suggested Topics" />
 </ListItem>
-</Link>
 </List>
 <List>
 
@@ -371,8 +370,8 @@ export default function AddTheme() {
           id="outlined-full-width"
           label="Enter the Theme Title"
           style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="Theme title"
-          helperText="Theme title is important"
+          placeholder="Topic"
+          helperText="Theme topic is important"
           fullWidth
           margin="normal"
           onChange={handleThemeTitle}
@@ -388,7 +387,7 @@ export default function AddTheme() {
 <div>
 <Form>
   <Form.Group>
-    <Form.File type="file" id="file" label="Upload the logo for Theme" onChange={handleThemeLogo}/>
+    <Form.File type="file" id="file" label="Upload the logo for Topic" onChange={handleThemeLogo}/>
   </Form.Group>
 </Form>
 <Button variant="contained" color="secondary" onClick={uploadPic}>
