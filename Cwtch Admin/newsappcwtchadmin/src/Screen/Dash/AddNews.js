@@ -24,6 +24,10 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './listitems';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Chart from './Chart';
 import Deposits from './Deposits';
@@ -173,18 +177,31 @@ var firebaseConfig = {
 
 
 
-export default function AddTheme() {
+export default function AddNews() {
 
 
     const [thmeTitle, setthmeTitle] = useState('');
     const [progress, setProgress] = useState(false);
     const [showFile, setshowFile] = useState(true)
-
+    const [opene,setopene] = useState(false);
     const [logourl, setlogourl] = useState('');
 
 
     const [logo, setlogo] = useState(null);
 
+
+    const [age, setAge] = useState('okok');
+    const handleChange = (event) => {
+        setAge(event.target.value);
+      };
+    
+      const handleClose = () => {
+        setopene(false);
+      };
+    
+      const handleOpen = () => {
+        setopene(true);
+      };
 
     const handleThemeLogo = (e) => {
         setlogo(e.target.files[0])
@@ -201,7 +218,7 @@ export default function AddTheme() {
         let file = logo;
         var storage = firebase.storage();
         var storageRef = storage.ref();
-        var uploadTask = storageRef.child(`theme/logo/${file.name}`).put(file);
+        var uploadTask = storageRef.child(`suggested/logo/${file.name}`).put(file);
 
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
             (snapshot) =>{
@@ -232,7 +249,7 @@ export default function AddTheme() {
         }
 
 
-        firebase.database().ref(`/theme/${thmeTitle}`).set(
+        firebase.database().ref(`/suggested/${thmeTitle}`).set(
             {
                 title: thmeTitle,
                 logo: logourl
@@ -295,7 +312,7 @@ export default function AddTheme() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Core Theme
+            News
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -339,26 +356,23 @@ export default function AddTheme() {
 </Link>
 </List>
 <List>
-<Link to="/adds">
+
 <ListItem button>
 <ListItemIcon>
 <DashboardIcon />
 </ListItemIcon>
 <ListItemText primary="Add Suggested Topics" />
 </ListItem>
-</Link>
 </List>
-<Link to="/addnews">
 <List>
 
 <ListItem button>
 <ListItemIcon>
 <DashboardIcon />
 </ListItemIcon>
-<ListItemText primary="Add News" />
+<ListItemText primary="Dashboard" />
 </ListItem>
 </List>
-</Link>
 
 
         <Divider />
@@ -368,13 +382,86 @@ export default function AddTheme() {
         <div className={classes.appBarSpacer} />
 
             <div className={classes.root} style={{marginTop:100}}>
+
+                
                 <div>
+                <div style={{margin: 8,marginRight:500,marginLeft:200,marginTop:50}}>
+                <FormControl className={classes.formControl}>
+                    <div className={classes.root} component="h2">
+                    Add Core Theme to the News
+                    </div> 
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={opene}
+          onClose={handleClose}
+          onOpen={handleOpen}
+          value={age}
+          onChange={handleChange}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+
+      </FormControl>
+                </div>
+                <div style={{margin: 8,marginRight:500,marginLeft:200,marginTop:50}}>
+                <FormControl className={classes.formControl}>
+                    <div className={classes.root} component="h2">
+                    Add Category
+                    </div> 
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={opene}
+          onClose={handleClose}
+          onOpen={handleOpen}
+          value={age}
+          onChange={handleChange}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+      </FormControl>
+                </div>
+                <div style={{margin: 8,marginRight:500,marginLeft:200,marginTop:50}}>
+                <FormControl className={classes.formControl}>
+                    <div className={classes.root} component="h2">
+                    Add Suggested Topics
+                    </div> 
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={opene}
+          onClose={handleClose}
+          onOpen={handleOpen}
+          value={age}
+          onChange={handleChange}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+      </FormControl>
+                </div>
+               
         <TextField
           id="outlined-full-width"
           label="Enter the Theme Title"
           style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="Theme title"
-          helperText="Theme title is important"
+          placeholder="Topic"
+          helperText="Enter the Headlines"
           fullWidth
           margin="normal"
           onChange={handleThemeTitle}
@@ -384,35 +471,26 @@ export default function AddTheme() {
           }}
           variant="outlined"
         />
-        <div style={{marginLeft:200,marginTop:50}}>
+            <div>
 
-            {showFile ? (
-<div>
-<Form>
-  <Form.Group>
-    <Form.File type="file" id="file" label="Upload the logo for Theme" onChange={handleThemeLogo}/>
-  </Form.Group>
-</Form>
-<Button variant="contained" color="secondary" onClick={uploadPic}>
-  Upload
-</Button>
-    </div>
-            ) : (
-               (progress && !showFile) ? (
-                <LinearProgress />
+            <TextField
+          id="outlined-full-width"
+          label="Enter the Theme Title"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="Topic"
+          helperText="Enter the Headlines"
+          fullWidth
+          
+          margin="normal"
+          onChange={handleThemeTitle}
+          value={thmeTitle}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+            </div>
 
-               ) : (
-                    <div>
-                        <Alert severity="success">Logo upload done</Alert>
-                        </div>
-               )
-
-               
-            )
-
-            }
- 
-        </div>
 
         <div style={{marginLeft:500,marginTop:60}}>
         <Button variant="contained" color="primary"  onClick={onSubmitTheme}>
