@@ -264,7 +264,8 @@ export default function AddNews() {
             core:age,
             category: agee,
             suggested: ageee,
-            pic:logourl
+            pic:logourl,
+            url:url
         }).then(() => {
             setthmeTitle('')
             setthmeTitle1('')
@@ -272,6 +273,7 @@ export default function AddNews() {
             setProgress(false)
             setshowFile(true)
             setAge('')
+            seturl('')
             setAgee('')
             setAgeee('')
 
@@ -301,6 +303,7 @@ export default function AddNews() {
     const [agee, setAgee] = useState('');
     const [ageee, setAgeee] = useState('');
 
+    const [url, seturl] = useState('');
     const handleChange1 = (event) => {
         setAge(event.target.value);
       };
@@ -308,6 +311,10 @@ export default function AddNews() {
       const handleClose1 = () => {
         setopene(false);
       };
+
+      const handleURL = (e) => {
+        seturl(e.target.value)
+      }
     
       const handleOpen1 = () => {
         setopene(true);
@@ -577,6 +584,23 @@ Upload
           multiline
           onChange={handleThemeTitle1}
           value={thmeTitle1}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+            </div>
+            <div>
+            <TextField
+          id="outlined-full-width"
+          label="Enter the Theme Title"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="URL of the news"
+          helperText="Enter the URL"
+          fullWidth
+          margin="normal"
+          onChange={handleURL}
+          value={url}
           InputLabelProps={{
             shrink: true,
           }}
