@@ -295,7 +295,7 @@ export default function AddSuggestionTopics() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Dashboard
+            Add Suggested Topics
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -347,15 +347,17 @@ export default function AddSuggestionTopics() {
 <ListItemText primary="Add Suggested Topics" />
 </ListItem>
 </List>
+<Link to="/addnews">
 <List>
 
 <ListItem button>
 <ListItemIcon>
 <DashboardIcon />
 </ListItemIcon>
-<ListItemText primary="Dashboard" />
+<ListItemText primary="Add News" />
 </ListItem>
 </List>
+</Link>
 
 
         <Divider />

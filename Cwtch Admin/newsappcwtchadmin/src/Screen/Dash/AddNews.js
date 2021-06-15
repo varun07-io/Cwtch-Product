@@ -1,7 +1,8 @@
 
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import {Form,Col,Row,Image} from 'react-bootstrap'
 import clsx from 'clsx';
+import { v4 as uuidv4 } from 'uuid'
 import { Link } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -24,6 +25,10 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './listitems';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Chart from './Chart';
 import Deposits from './Deposits';
@@ -173,10 +178,40 @@ var firebaseConfig = {
 
 
 
-export default function AddTheme() {
+export default function AddNews() {
+
+    
+    
+    useEffect(() => {
+     
+        getCoreTheme()
+        getSuggestedTopic()
+
+    }, [])
+    
+
+    const [coretheme, setcoretheme] = useState('');
+    const [suggtheme, setsuggtheme] = useState('');
 
 
+    const getCoreTheme = () => {
+        firebase.database().ref('/theme').on( 'value' , snapshot => {
+            const snap = snapshot.val();
+            console.log(snap);
+            setcoretheme(Object.values(snap))
+        })
+    }
+    
+    const getSuggestedTopic = () => {
+        firebase.database().ref('/suggested').on( 'value' , snapshot => {
+            const sugg = snapshot.val();    
+            console.log(sugg);
+            setsuggtheme(Object.values(sugg))
+        })
+    }
     const [thmeTitle, setthmeTitle] = useState('');
+    const [thmeTitle1, setthmeTitle1] = useState('');
+
     const [progress, setProgress] = useState(false);
     const [showFile, setshowFile] = useState(true)
 
@@ -186,12 +221,11 @@ export default function AddTheme() {
     const [logo, setlogo] = useState(null);
 
 
+    const [newsTitle, setnewsTitle] = useState('');
+    const [newsContent, setnewsContent] = useState('');
+
     const handleThemeLogo = (e) => {
         setlogo(e.target.files[0])
-    }
-
-    const handleThemeTitle = (event) => {
-        setthmeTitle(event.target.value);
     }
 
     const uploadPic = (e) => {
@@ -201,7 +235,7 @@ export default function AddTheme() {
         let file = logo;
         var storage = firebase.storage();
         var storageRef = storage.ref();
-        var uploadTask = storageRef.child(`theme/logo/${file.name}`).put(file);
+        var uploadTask = storageRef.child(`news/pic/${file.name}`).put(file);
 
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
             (snapshot) =>{
@@ -222,49 +256,84 @@ export default function AddTheme() {
     }
 
     const onSubmitTheme = (e) => {
-        e.preventDefault();    
-        console.log("Here");
-
-        if(thmeTitle.length <= 1 && !logourl){
-            return(
-<Alert severity="warning">Fill all fields</Alert>
-            )
-        }
-
-
-        firebase.database().ref(`/theme/${thmeTitle}`).set(
-            {
-                title: thmeTitle,
-                logo: logourl
-            }
-        ).then(() => {
+        e.preventDefault();
+        const id = uuidv4();
+        firebase.database().ref(`/news/${id}`).set({
+            newsTitle: thmeTitle,
+            newsDetails:thmeTitle1,
+            core:age,
+            category: agee,
+            suggested: ageee,
+            pic:logourl
+        }).then(() => {
             setthmeTitle('')
+            setthmeTitle1('')
             setlogourl('')
-            setlogo(null)
-    setshowFile(true)
-            console.log("Done");
-            return <Alert severity="success">Done</Alert>
+            setProgress(false)
+            setshowFile(true)
+            setAge('')
+            setAgee('')
+            setAgeee('')
+
+            return <Alert severity="warning">Uploaded</Alert>
         }).catch(err => {
-            console.log(err)
+
         })
+    }
 
 
+    
+
+    const handleThemeTitle = (event) => {
+        setthmeTitle(event.target.value);
+    }
+
+    const handleThemeTitle1 = (event) => {
+        setthmeTitle1(event.target.value);
     }
 
 
 
+    const [opene, setopene] = useState(false)
+    const [openee, setopenee] = useState(false)
+    const [openeee, setopeneee] = useState(false)
+    const [age, setAge] = useState('');
+    const [agee, setAgee] = useState('');
+    const [ageee, setAgeee] = useState('');
 
-
-
-
-
-
-
-
-
-
-
-
+    const handleChange1 = (event) => {
+        setAge(event.target.value);
+      };
+    
+      const handleClose1 = () => {
+        setopene(false);
+      };
+    
+      const handleOpen1 = () => {
+        setopene(true);
+      };
+      const handleChange2 = (event) => {
+        setAgee(event.target.value);
+      };
+    
+      const handleClose2 = () => {
+        setopenee(false);
+      };
+    
+      const handleOpen2 = () => {
+        setopenee(true);
+      };
+      const handleChange3 = (event) => {
+        setAgeee(event.target.value);
+      };
+    
+      const handleClose3 = () => {
+        setopeneee(false);
+      };
+    
+      const handleOpen3 = () => {
+        setopeneee(true);
+      };
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -295,7 +364,7 @@ export default function AddTheme() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Core Theme
+            News
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -339,26 +408,23 @@ export default function AddTheme() {
 </Link>
 </List>
 <List>
-<Link to="/adds">
+
 <ListItem button>
 <ListItemIcon>
 <DashboardIcon />
 </ListItemIcon>
 <ListItemText primary="Add Suggested Topics" />
 </ListItem>
-</Link>
 </List>
-<Link to="/addnews">
 <List>
 
 <ListItem button>
 <ListItemIcon>
 <DashboardIcon />
 </ListItemIcon>
-<ListItemText primary="Add News" />
+<ListItemText primary="Dashboard" />
 </ListItem>
 </List>
-</Link>
 
 
         <Divider />
@@ -368,13 +434,127 @@ export default function AddTheme() {
         <div className={classes.appBarSpacer} />
 
             <div className={classes.root} style={{marginTop:100}}>
+
+                
                 <div>
+                <div style={{margin: 8,marginRight:500,marginLeft:200,marginTop:50}}>
+                <FormControl className={classes.formControl}>
+                    <div className={classes.root} component="h2">
+                    Add Core Theme to the News
+                    </div> 
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={opene}
+          onClose={handleClose1}
+          onOpen={handleOpen1}
+          value={age}
+          onChange={handleChange1}
+        >
+            {coretheme && coretheme.map((item,index) => {
+                    return(
+                        <MenuItem value={item.title}>
+                        <em>{item.title}</em>
+                      </MenuItem>
+                    )
+            })
+
+            }
+    
+        </Select>
+
+      </FormControl>
+                </div>
+                <div style={{margin: 8,marginRight:500,marginLeft:200,marginTop:50}}>
+                <FormControl className={classes.formControl}>
+                    <div className={classes.root} component="h2">
+                    Add Category
+                    </div> 
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={openee}
+          onClose={handleClose2}
+          onOpen={handleOpen2}
+          value={agee}
+          onChange={handleChange2}
+        >
+             <MenuItem value="">
+            My Feed
+          </MenuItem>
+          <MenuItem value="All News">All News</MenuItem>
+          <MenuItem value="Top Stories">Top Stories</MenuItem>
+          <MenuItem value="Trending">Trending</MenuItem>
+          <MenuItem value="Bookmarks">Bookmarks</MenuItem>
+          <MenuItem value="Unreal">Unreal</MenuItem>
+
+
+         
+        </Select>
+      </FormControl>
+                </div>
+                <div style={{margin: 8,marginRight:500,marginLeft:200,marginTop:50}}>
+                <FormControl className={classes.formControl}>
+                    <div className={classes.root} component="h2">
+                    Add Suggested Topics
+                    </div> 
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={openeee}
+          onClose={handleClose3}
+          onOpen={handleOpen3}
+          value={ageee}
+          onChange={handleChange3}
+        >
+           {suggtheme && suggtheme.map((item,index) => {
+                    return(
+                        <MenuItem value={item.title}>
+                        <em>{item.title}</em>
+                      </MenuItem>
+                    )
+            })
+
+            }
+        </Select>
+      </FormControl>
+      <div style={{marginLeft:200,marginTop:50}}>
+
+{showFile ? (
+<div>
+<Form>
+<Form.Group>
+<Form.File type="file" id="file" label="Upload the logo for Topic" onChange={handleThemeLogo}/>
+</Form.Group>
+</Form>
+<Button variant="contained" color="secondary" onClick={uploadPic}>
+Upload
+</Button>
+</div>
+) : (
+   (progress && !showFile) ? (
+    <LinearProgress />
+
+   ) : (
+        <div>
+            <Alert severity="success">Logo upload done</Alert>
+            </div>
+   )
+
+   
+)
+
+}
+
+</div>
+                </div>
+               
         <TextField
           id="outlined-full-width"
           label="Enter the Theme Title"
           style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="Theme title"
-          helperText="Theme title is important"
+          placeholder="Topic"
+          helperText="Enter the Headlines"
           fullWidth
           margin="normal"
           onChange={handleThemeTitle}
@@ -384,35 +564,26 @@ export default function AddTheme() {
           }}
           variant="outlined"
         />
-        <div style={{marginLeft:200,marginTop:50}}>
+            <div>
 
-            {showFile ? (
-<div>
-<Form>
-  <Form.Group>
-    <Form.File type="file" id="file" label="Upload the logo for Theme" onChange={handleThemeLogo}/>
-  </Form.Group>
-</Form>
-<Button variant="contained" color="secondary" onClick={uploadPic}>
-  Upload
-</Button>
-    </div>
-            ) : (
-               (progress && !showFile) ? (
-                <LinearProgress />
+            <TextField
+          id="outlined-full-width"
+          label="Enter the Theme Title"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="Topic"
+          helperText="Enter the Headlines Details"
+          fullWidth
+          margin="normal"
+          multiline
+          onChange={handleThemeTitle1}
+          value={thmeTitle1}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+            </div>
 
-               ) : (
-                    <div>
-                        <Alert severity="success">Logo upload done</Alert>
-                        </div>
-               )
-
-               
-            )
-
-            }
- 
-        </div>
 
         <div style={{marginLeft:500,marginTop:60}}>
         <Button variant="contained" color="primary"  onClick={onSubmitTheme}>
