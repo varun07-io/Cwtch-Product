@@ -1,7 +1,8 @@
 
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import {Form,Col,Row,Image} from 'react-bootstrap'
 import clsx from 'clsx';
+import { v4 as uuidv4 } from 'uuid'
 import { Link } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -179,36 +180,52 @@ var firebaseConfig = {
 
 export default function AddNews() {
 
+    
+    
+    useEffect(() => {
+     
+        getCoreTheme()
+        getSuggestedTopic()
 
+    }, [])
+    
+
+    const [coretheme, setcoretheme] = useState('');
+    const [suggtheme, setsuggtheme] = useState('');
+
+
+    const getCoreTheme = () => {
+        firebase.database().ref('/theme').on( 'value' , snapshot => {
+            const snap = snapshot.val();
+            console.log(snap);
+            setcoretheme(Object.values(snap))
+        })
+    }
+    
+    const getSuggestedTopic = () => {
+        firebase.database().ref('/suggested').on( 'value' , snapshot => {
+            const sugg = snapshot.val();    
+            console.log(sugg);
+            setsuggtheme(Object.values(sugg))
+        })
+    }
     const [thmeTitle, setthmeTitle] = useState('');
+    const [thmeTitle1, setthmeTitle1] = useState('');
+
     const [progress, setProgress] = useState(false);
     const [showFile, setshowFile] = useState(true)
-    const [opene,setopene] = useState(false);
+
     const [logourl, setlogourl] = useState('');
 
 
     const [logo, setlogo] = useState(null);
 
 
-    const [age, setAge] = useState('okok');
-    const handleChange = (event) => {
-        setAge(event.target.value);
-      };
-    
-      const handleClose = () => {
-        setopene(false);
-      };
-    
-      const handleOpen = () => {
-        setopene(true);
-      };
+    const [newsTitle, setnewsTitle] = useState('');
+    const [newsContent, setnewsContent] = useState('');
 
     const handleThemeLogo = (e) => {
         setlogo(e.target.files[0])
-    }
-
-    const handleThemeTitle = (event) => {
-        setthmeTitle(event.target.value);
     }
 
     const uploadPic = (e) => {
@@ -218,7 +235,7 @@ export default function AddNews() {
         let file = logo;
         var storage = firebase.storage();
         var storageRef = storage.ref();
-        var uploadTask = storageRef.child(`suggested/logo/${file.name}`).put(file);
+        var uploadTask = storageRef.child(`news/pic/${file.name}`).put(file);
 
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
             (snapshot) =>{
@@ -239,49 +256,75 @@ export default function AddNews() {
     }
 
     const onSubmitTheme = (e) => {
-        e.preventDefault();    
-        console.log("Here");
-
-        if(thmeTitle.length <= 1 && !logourl){
-            return(
-<Alert severity="warning">Fill all fields</Alert>
-            )
-        }
-
-
-        firebase.database().ref(`/suggested/${thmeTitle}`).set(
-            {
-                title: thmeTitle,
-                logo: logourl
-            }
-        ).then(() => {
-            setthmeTitle('')
-            setlogourl('')
-            setlogo(null)
-    setshowFile(true)
-            console.log("Done");
-            return <Alert severity="success">Done</Alert>
+        e.preventDefault();
+        const id = uuidv4();
+        firebase.database().ref(`/news/${id}`).set({
+            newsTitle: thmeTitle,
+            newsDetails:thmeTitle1,
+            core:age,
+            category: agee,
+            suggested: ageee
+        }).then(() => {
+                   
+            return <Alert severity="warning">Uploaded</Alert>
         }).catch(err => {
-            console.log(err)
+
         })
+    }
 
 
+    
+
+    const handleThemeTitle = (event) => {
+        setthmeTitle(event.target.value);
+    }
+
+    const handleThemeTitle1 = (event) => {
+        setthmeTitle1(event.target.value);
     }
 
 
 
+    const [opene, setopene] = useState(false)
+    const [openee, setopenee] = useState(false)
+    const [openeee, setopeneee] = useState(false)
+    const [age, setAge] = useState('');
+    const [agee, setAgee] = useState('');
+    const [ageee, setAgeee] = useState('');
 
-
-
-
-
-
-
-
-
-
-
-
+    const handleChange1 = (event) => {
+        setAge(event.target.value);
+      };
+    
+      const handleClose1 = () => {
+        setopene(false);
+      };
+    
+      const handleOpen1 = () => {
+        setopene(true);
+      };
+      const handleChange2 = (event) => {
+        setAgee(event.target.value);
+      };
+    
+      const handleClose2 = () => {
+        setopenee(false);
+      };
+    
+      const handleOpen2 = () => {
+        setopenee(true);
+      };
+      const handleChange3 = (event) => {
+        setAgeee(event.target.value);
+      };
+    
+      const handleClose3 = () => {
+        setopeneee(false);
+      };
+    
+      const handleOpen3 = () => {
+        setopeneee(true);
+      };
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -394,17 +437,21 @@ export default function AddNews() {
           labelId="demo-controlled-open-select-label"
           id="demo-controlled-open-select"
           open={opene}
-          onClose={handleClose}
-          onOpen={handleOpen}
+          onClose={handleClose1}
+          onOpen={handleOpen1}
           value={age}
-          onChange={handleChange}
+          onChange={handleChange1}
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+            {coretheme && coretheme.map((item,index) => {
+                    return(
+                        <MenuItem value={item.title}>
+                        <em>{item.title}</em>
+                      </MenuItem>
+                    )
+            })
+
+            }
+    
         </Select>
 
       </FormControl>
@@ -417,18 +464,23 @@ export default function AddNews() {
         <Select
           labelId="demo-controlled-open-select-label"
           id="demo-controlled-open-select"
-          open={opene}
-          onClose={handleClose}
-          onOpen={handleOpen}
-          value={age}
-          onChange={handleChange}
+          open={openee}
+          onClose={handleClose2}
+          onOpen={handleOpen2}
+          value={agee}
+          onChange={handleChange2}
         >
-          <MenuItem value="">
-            <em>None</em>
+             <MenuItem value="">
+            My Feed
           </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          <MenuItem value="All News">All News</MenuItem>
+          <MenuItem value="Top Stories">Top Stories</MenuItem>
+          <MenuItem value="Trending">Trending</MenuItem>
+          <MenuItem value="Bookmarks">Bookmarks</MenuItem>
+          <MenuItem value="Unreal">Unreal</MenuItem>
+
+
+         
         </Select>
       </FormControl>
                 </div>
@@ -440,20 +492,52 @@ export default function AddNews() {
         <Select
           labelId="demo-controlled-open-select-label"
           id="demo-controlled-open-select"
-          open={opene}
-          onClose={handleClose}
-          onOpen={handleOpen}
-          value={age}
-          onChange={handleChange}
+          open={openeee}
+          onClose={handleClose3}
+          onOpen={handleOpen3}
+          value={ageee}
+          onChange={handleChange3}
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+           {suggtheme && suggtheme.map((item,index) => {
+                    return(
+                        <MenuItem value={item.title}>
+                        <em>{item.title}</em>
+                      </MenuItem>
+                    )
+            })
+
+            }
         </Select>
       </FormControl>
+      <div style={{marginLeft:200,marginTop:50}}>
+
+{showFile ? (
+<div>
+<Form>
+<Form.Group>
+<Form.File type="file" id="file" label="Upload the logo for Topic" onChange={handleThemeLogo}/>
+</Form.Group>
+</Form>
+<Button variant="contained" color="secondary" onClick={uploadPic}>
+Upload
+</Button>
+</div>
+) : (
+   (progress && !showFile) ? (
+    <LinearProgress />
+
+   ) : (
+        <div>
+            <Alert severity="success">Logo upload done</Alert>
+            </div>
+   )
+
+   
+)
+
+}
+
+</div>
                 </div>
                
         <TextField
@@ -478,12 +562,12 @@ export default function AddNews() {
           label="Enter the Theme Title"
           style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
           placeholder="Topic"
-          helperText="Enter the Headlines"
+          helperText="Enter the Headlines Details"
           fullWidth
-          
           margin="normal"
-          onChange={handleThemeTitle}
-          value={thmeTitle}
+          multiline
+          onChange={handleThemeTitle1}
+          value={thmeTitle1}
           InputLabelProps={{
             shrink: true,
           }}
