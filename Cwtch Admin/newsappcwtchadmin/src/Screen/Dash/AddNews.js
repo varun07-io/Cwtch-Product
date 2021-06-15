@@ -263,9 +263,18 @@ export default function AddNews() {
             newsDetails:thmeTitle1,
             core:age,
             category: agee,
-            suggested: ageee
+            suggested: ageee,
+            pic:logourl
         }).then(() => {
-                   
+            setthmeTitle('')
+            setthmeTitle1('')
+            setlogourl('')
+            setProgress(false)
+            setshowFile(true)
+            setAge('')
+            setAgee('')
+            setAgeee('')
+
             return <Alert severity="warning">Uploaded</Alert>
         }).catch(err => {
 
