@@ -177,6 +177,7 @@ export default function AddSuggestionTopics() {
 
 
     const [thmeTitle, setthmeTitle] = useState('');
+    const [themeColor, setthemeColor] = useState('');
     const [progress, setProgress] = useState(false);
     const [showFile, setshowFile] = useState(true)
 
@@ -193,6 +194,10 @@ export default function AddSuggestionTopics() {
     const handleThemeTitle = (event) => {
         setthmeTitle(event.target.value);
     }
+
+    const handleThemeColor = (event) => {
+      setthemeColor(event.target.value);
+  }
 
     const uploadPic = (e) => {
         e.preventDefault();
@@ -235,12 +240,14 @@ export default function AddSuggestionTopics() {
         firebase.database().ref(`/suggested/${thmeTitle}`).set(
             {
                 title: thmeTitle,
-                logo: logourl
+                logo: logourl,
+                color:themeColor
             }
         ).then(() => {
             setthmeTitle('')
             setlogourl('')
             setlogo(null)
+            setthemeColor('')
     setshowFile(true)
             console.log("Done");
             return <Alert severity="success">Done</Alert>
@@ -383,6 +390,23 @@ export default function AddSuggestionTopics() {
           }}
           variant="outlined"
         />
+        <div>
+        <TextField
+          id="outlined-full-width"
+          label="Enter the Theme Title"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="Color for design"
+          helperText="Theme color"
+          fullWidth
+          margin="normal"
+          onChange={handleThemeColor}
+          value={themeColor}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        </div>
         <div style={{marginLeft:200,marginTop:50}}>
 
             {showFile ? (
