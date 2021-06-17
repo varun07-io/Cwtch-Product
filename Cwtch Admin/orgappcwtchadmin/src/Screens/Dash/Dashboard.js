@@ -185,7 +185,7 @@ export default function Dashboard() {
     </ListItem>
         </List>
         <List>
-<Link to="/addt">
+<Link to="/addposthome">
 <ListItem button>
 <ListItemIcon>
 <DashboardIcon />
