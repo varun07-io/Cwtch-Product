@@ -181,9 +181,18 @@ const firebaseConfig = {
 
 export default function AddPost() {
 
-    
-    
+    useEffect(() => {
+      firebase.database().ref('/post/tags/').on( 'value' , snapshot => {
+        const snap = snapshot.val();
+        console.log(Object.values(snap));
+        setcoretheme(Object.values(snap))
+      })
 
+    }, [])
+    
+    const getAllPostTags = () => {
+
+    }
     
 
     const [coretheme, setcoretheme] = useState('');
@@ -209,12 +218,20 @@ export default function AddPost() {
     const [thmeTitle1, setthmeTitle1] = useState('');
 
     const [progress, setProgress] = useState(false);
+    const [progress1, setProgress1] = useState(false);
+
     const [showFile, setshowFile] = useState(true)
+    const [showFile1, setshowFile1] = useState(true)
+
 
     const [logourl, setlogourl] = useState('');
+    const [logourl1, setlogourl1] = useState('');
+
 
 
     const [logo, setlogo] = useState(null);
+    const [logo1, setlogo1] = useState(null);
+
 
 
     const [newsTitle, setnewsTitle] = useState('');
@@ -229,6 +246,10 @@ export default function AddPost() {
         setlogo(e.target.files[0])
     }
 
+    const handleThemeLogo1 = (e) => {
+      setlogo1(e.target.files[0])
+  }
+
     const uploadPic = (e) => {
         e.preventDefault();
         setProgress(true)
@@ -236,7 +257,7 @@ export default function AddPost() {
         let file = logo;
         var storage = firebase.storage();
         var storageRef = storage.ref();
-        var uploadTask = storageRef.child(`news/pic/${file.name}`).put(file);
+        var uploadTask = storageRef.child(`post/pic/${file.name}`).put(file);
 
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
             (snapshot) =>{
@@ -255,6 +276,32 @@ export default function AddPost() {
            }
          ) 
     }
+    const uploadPic1 = (e) => {
+      e.preventDefault();
+      setProgress1(true)
+      setshowFile1(false)
+      let file = logo;
+      var storage = firebase.storage();
+      var storageRef = storage.ref();
+      var uploadTask = storageRef.child(`post/subpic/${file.name}`).put(file);
+
+      uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+          (snapshot) =>{
+            var progress = Math.round((snapshot.bytesTransferred/snapshot.totalBytes))*100
+
+          },(error) =>{
+            throw error
+          },() =>{
+            // uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) =>{
+      
+            uploadTask.snapshot.ref.getDownloadURL().then((url) =>{
+              setlogourl1(url)
+              setProgress1(false)
+            })
+      
+         }
+       ) 
+  }
 
     const onSubmitTheme = (e) => {
         e.preventDefault();
@@ -449,7 +496,7 @@ export default function AddPost() {
                 <div style={{margin: 8,marginRight:500,marginLeft:200,marginTop:50}}>
                 <FormControl className={classes.formControl}>
                     <div className={classes.root} component="h2">
-                    Add Core Theme to the News
+                    Add Tags to Post
                     </div> 
         <Select
           labelId="demo-controlled-open-select-label"
@@ -462,8 +509,8 @@ export default function AddPost() {
         >
             {coretheme && coretheme.map((item,index) => {
                     return(
-                        <MenuItem value={item.title}>
-                        <em>{item.title}</em>
+                        <MenuItem value={item.tag}>
+                        <em>{item.tag}</em>
                       </MenuItem>
                     )
             })
@@ -474,66 +521,16 @@ export default function AddPost() {
 
       </FormControl>
                 </div>
+             
                 <div style={{margin: 8,marginRight:500,marginLeft:200,marginTop:50}}>
-                <FormControl className={classes.formControl}>
-                    <div className={classes.root} component="h2">
-                    Add Category
-                    </div> 
-        <Select
-          labelId="demo-controlled-open-select-label"
-          id="demo-controlled-open-select"
-          open={openee}
-          onClose={handleClose2}
-          onOpen={handleOpen2}
-          value={agee}
-          onChange={handleChange2}
-        >
-             <MenuItem value="">
-            My Feed
-          </MenuItem>
-          <MenuItem value="All News">All News</MenuItem>
-          <MenuItem value="Top Stories">Top Stories</MenuItem>
-          <MenuItem value="Trending">Trending</MenuItem>
-          <MenuItem value="Bookmarks">Bookmarks</MenuItem>
-          <MenuItem value="Unreal">Unreal</MenuItem>
-
-
-         
-        </Select>
-      </FormControl>
-                </div>
-                <div style={{margin: 8,marginRight:500,marginLeft:200,marginTop:50}}>
-                <FormControl className={classes.formControl}>
-                    <div className={classes.root} component="h2">
-                    Add Suggested Topics
-                    </div> 
-        <Select
-          labelId="demo-controlled-open-select-label"
-          id="demo-controlled-open-select"
-          open={openeee}
-          onClose={handleClose3}
-          onOpen={handleOpen3}
-          value={ageee}
-          onChange={handleChange3}
-        >
-           {suggtheme && suggtheme.map((item,index) => {
-                    return(
-                        <MenuItem value={item.title}>
-                        <em>{item.title}</em>
-                      </MenuItem>
-                    )
-            })
-
-            }
-        </Select>
-      </FormControl>
+               
       <div style={{marginLeft:200,marginTop:50}}>
 
 {showFile ? (
 <div>
 <Form>
 <Form.Group>
-<Form.File type="file" id="file" label="Upload the logo for Topic" onChange={handleThemeLogo}/>
+<Form.File type="file" id="file" label="Upload Post Image Here" onChange={handleThemeLogo}/>
 </Form.Group>
 </Form>
 <Button variant="contained" color="secondary" onClick={uploadPic}>
@@ -546,7 +543,36 @@ Upload
 
    ) : (
         <div>
-            <Alert severity="success">Logo upload done</Alert>
+            <Alert severity="success">Uploaded Post Main Image Here</Alert>
+            </div>
+   )
+
+   
+)
+
+}
+
+</div>
+<div style={{marginLeft:200,marginTop:50}}>
+
+{showFile1 ? (
+<div>
+<Form>
+<Form.Group>
+<Form.File type="file" id="file" label="Upload Sub Image Here" onChange={handleThemeLogo1}/>
+</Form.Group>
+</Form>
+<Button variant="contained" color="secondary" onClick={uploadPic1}>
+Upload
+</Button>
+</div>
+) : (
+   (progress1 && !showFile1) ? (
+    <LinearProgress />
+
+   ) : (
+        <div>
+            <Alert severity="success">Uploaded Post Main Image Here</Alert>
             </div>
    )
 
