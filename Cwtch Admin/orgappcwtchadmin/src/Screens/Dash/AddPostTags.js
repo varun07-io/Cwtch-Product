@@ -236,7 +236,7 @@ export default function AddPostTags() {
         let file = logo;
         var storage = firebase.storage();
         var storageRef = storage.ref();
-        var uploadTask = storageRef.child(`news/pic/${file.name}`).put(file);
+        var uploadTask = storageRef.child(`posts/banner/pic/${file.name}`).put(file);
 
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
             (snapshot) =>{
@@ -259,10 +259,13 @@ export default function AddPostTags() {
     const onSubmitTheme = (e) => {
         e.preventDefault();
         const id = uuidv4();
-        firebase.database().ref(`/post/tags/`).set({
-            tag:tags
+        firebase.database().ref(`/post/tags/${id}`).set({
+            tag:tags,
+            banner:logourl
         }).then(() => {
             settags('')
+            setlogourl('')
+            setshowFile(true)
             console.log("Done")
 
             return <Alert severity="warning">Uploaded</Alert>
@@ -573,6 +576,35 @@ Upload
           }}
           variant="outlined"
         />
+        <div style={{marginLeft:200,marginTop:50}}>
+
+{showFile ? (
+<div>
+<Form>
+<Form.Group>
+<Form.File type="file" id="file" label="Upload the logo for Topic" onChange={handleThemeLogo}/>
+</Form.Group>
+</Form>
+<Button variant="contained" color="secondary" onClick={uploadPic}>
+Upload
+</Button>
+</div>
+) : (
+   (progress && !showFile) ? (
+    <LinearProgress />
+
+   ) : (
+        <div>
+            <Alert severity="success">Logo upload done</Alert>
+            </div>
+   )
+
+   
+)
+
+}
+
+</div>
         </div>
             {/* <div>
 
