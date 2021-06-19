@@ -188,6 +188,16 @@ export default function AddEpisode() {
     const [highlights, sethighlights] = useState('');
     const [fullStory, setfullStory] = useState('');
     const [subStory, setsubStory] = useState('');
+    const [headquartes, setheadquartes] = useState('');
+    const [bm, setbm] = useState('');
+    const [funding, setfunding] = useState('');
+    const [noemp, setnoemp] = useState('');
+    const [time, settime] = useState('');
+    const [revanue, setrevanue] = useState('');
+    const [targetmarket, settargetmarket] = useState('');
+
+
+
 
     const [productImage, setproductImage] = useState('');
     const [importantLink, setimportantLink] = useState('');
@@ -222,6 +232,27 @@ export default function AddEpisode() {
               break;
             case 'linkVideo':
                 setlinkVideo(event.target.value);
+            break;
+            case 'headquartes':
+                setheadquartes(event.target.value);
+            break;
+            case 'bm':
+                setbm(event.target.value);
+            break;
+            case 'funding':
+                setfunding(event.target.value);
+            break;
+            case 'noemp':
+                setnoemp(event.target.value);
+            break;
+            case 'time':
+                settime(event.target.value);
+            break;
+            case 'revanue':
+                setrevanue(event.target.value);
+            break;
+            case 'targetmarket':
+                settargetmarket(event.target.value);
             break;
 
           }
@@ -437,6 +468,13 @@ export default function AddEpisode() {
             fullStory,
             subStory,
             importantLink,
+            headquartes,
+            bm,
+            time,
+            revanue,
+            funding,
+            noemp,
+            targetmarket,
             videoLinks,
             mainPostImage:logourl,
             subPostImage:logourl1,
@@ -451,12 +489,18 @@ export default function AddEpisode() {
             setfullStory('')
             setsubStory('')
             setimportantLink('')
-            setvideoLinks('')
+            setvideoLinks([])
             setlinkVideo('')
             setlogourl('')
             setlogourl1('')
             setlogourl2('')
-
+            setheadquartes('')
+            setbm('')
+            settime('')
+            setrevanue('')
+            setfunding('')
+            setnoemp('')
+            settargetmarket('')
             setshowFile(true)
             setshowFile1(true)
             setshowFile2(true)
@@ -681,7 +725,7 @@ export default function AddEpisode() {
 
 {showFile ? (
 <div>
-<h3>Add Thumbnail</h3>
+<h3>Add Company Logo</h3>
 
 <Form>
 <Form.Group>
@@ -862,7 +906,154 @@ Upload
           variant="outlined"
         />
         </div>
+        <div>
+        <h3>Add Company Headquarter</h3>
+
+        <TextField
+          id="outlined-full-width"
+          label="Enter Post Details Here"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="Add Post Details"
+          helperText="Add Post Details Here"
+          fullWidth
+          multiline
+          margin="normal"
+          onChange={handlePostSection("headquartes")}
+          value={headquartes}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        </div>
+        <div>
+        <h3>Add Company Business Model</h3>
+
+        <TextField
+          id="outlined-full-width"
+          label="Enter Post Details Here"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="Add Post Details"
+          helperText="Add Post Details Here"
+          fullWidth
+          multiline
+          margin="normal"
+          onChange={handlePostSection("bm")}
+          value={bm}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        </div>
+        <div>
+        <h3>Number of Employees</h3>
+
+        <TextField
+          id="outlined-full-width"
+          label="Enter Post Details Here"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="Add Post Details"
+          helperText="Add Post Details Here"
+          fullWidth
+          multiline
+          margin="normal"
+          onChange={handlePostSection("funding")}
+          value={funding}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        </div>
+
+
+        {/* Need to add CORE TEAM */}
+
+        <div>
+        <h3>Number of Time Line</h3>
+
+        <TextField
+          id="outlined-full-width"
+          label="Enter Post Details Here"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="Add Post Details"
+          helperText="Add Post Details Here"
+          fullWidth
+          multiline
+          margin="normal"
+          onChange={handlePostSection("noemp")}
+          value={noemp}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        </div>
+
+
+        <div>
+        <h3>Revanvue Stream</h3>
+
+        <TextField
+          id="outlined-full-width"
+          label="Enter Post Details Here"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="Add Post Details"
+          helperText="Add Post Details Here"
+          fullWidth
+          multiline
+          margin="normal"
+          onChange={handlePostSection("time")}
+          value={time}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        </div>
+
+        <div>
+        <h3>Target Market</h3>
+
+        <TextField
+          id="outlined-full-width"
+          label="Enter Post Details Here"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="Add Post Details"
+          helperText="Add Post Details Here"
+          fullWidth
+          multiline
+          margin="normal"
+          onChange={handlePostSection("revanue")}
+          value={revanue}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        </div>
        
+        <div>
+        <h3>Funding</h3>
+
+        <TextField
+          id="outlined-full-width"
+          label="Enter Post Details Here"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="Add Post Details"
+          helperText="Add Post Details Here"
+          fullWidth
+          multiline
+          margin="normal"
+          onChange={handlePostSection("targetmarket")}
+          value={targetmarket}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        </div>
         {/* <div>
 
         <div style={{marginLeft:200,marginTop:50}}>
