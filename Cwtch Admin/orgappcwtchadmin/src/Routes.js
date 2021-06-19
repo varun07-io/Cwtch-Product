@@ -5,6 +5,8 @@ import AddPost from './Screens/Dash/AddPost';
 import AddEpisode from './Screens/Dash/AddEpisode';
 import Dash from "./Screens/Dash/Dashboard"
 import AddEpisodeTags from './Screens/Dash/AddEpisodeTags';
+import AddCompanies from './Screens/Dash/AddCompanies';
+
 
 const Routes = () => {
     
@@ -19,6 +21,9 @@ const Routes = () => {
 
                     <Route path="/addepisodetags" exact component={AddEpisodeTags}/>
                     <Route path="/addepisode" exact component={AddEpisode}/>
+
+                    <Route path="/addcompanies" exact component={AddCompanies}/>
+
 
 
 
