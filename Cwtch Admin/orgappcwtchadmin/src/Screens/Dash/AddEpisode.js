@@ -43,6 +43,16 @@ import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Avatar from '@material-ui/core/Avatar';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import FolderIcon from '@material-ui/icons/Folder';
+import DeleteIcon from '@material-ui/icons/Delete';
+
+
 
 import firebase from 'firebase'
 import 'firebase/storage'
@@ -182,7 +192,10 @@ export default function AddEpisode() {
     const [productImage, setproductImage] = useState('');
     const [importantLink, setimportantLink] = useState('');
 
+    const [dense, setDense] = React.useState(false);
+    const [secondary, setSecondary] = React.useState(false);
 
+    const [linkVideo, setlinkVideo] = useState('');
 
     const handlePostSection = name => event => {
           switch(name){
@@ -207,8 +220,40 @@ export default function AddEpisode() {
             case 'importantLink':
               setimportantLink(event.target.value);
               break;
+            case 'linkVideo':
+                setlinkVideo(event.target.value);
+            break;
 
           }
+    }
+
+
+
+    // function generate(element) {
+    //     return [0, 1, 2].map((value) =>
+    //       React.cloneElement(element, {
+    //         key: value,
+    //       }),
+    //     );
+    //   }
+      
+
+      const [videoLinks, setvideoLinks] = useState([]);
+
+    const generate = (element) => {
+        return videoLinks.map((ok,value) =>
+        React.cloneElement(element, {
+          key: value,
+          val:ok
+        }),
+      );
+    }
+
+    const addoutubeLinks = () => {
+        const newList = videoLinks.slice();
+        newList.push(linkVideo);
+        setvideoLinks(newList);
+        setlinkVideo('')
     }
 
 
@@ -218,15 +263,8 @@ export default function AddEpisode() {
 
 
 
-
-
-
-
-
-
-
     useEffect(() => {
-      firebase.database().ref('/post/tags/').on( 'value' , snapshot => {
+      firebase.database().ref('/episode/tags/').on( 'value' , snapshot => {
         const snap = snapshot.val();
         console.log(Object.values(snap));
         setcoretheme(Object.values(snap));
@@ -312,7 +350,7 @@ export default function AddEpisode() {
         let file = logo;
         var storage = firebase.storage();
         var storageRef = storage.ref();
-        var uploadTask = storageRef.child(`post/pic/${file.name}${ID}`).put(file);
+        var uploadTask = storageRef.child(`episode/thumbnail/${file.name}${ID}`).put(file);
 
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
             (snapshot) =>{
@@ -339,7 +377,7 @@ export default function AddEpisode() {
       let file = logo;
       var storage = firebase.storage();
       var storageRef = storage.ref();
-      var uploadTask = storageRef.child(`post/subpic/${file.name}${ID}`).put(file);
+      var uploadTask = storageRef.child(`episode/videos/${file.name}${ID}`).put(file);
 
       uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
           (snapshot) =>{
@@ -367,7 +405,7 @@ export default function AddEpisode() {
     let file = logo;
     var storage = firebase.storage();
     var storageRef = storage.ref();
-    var uploadTask = storageRef.child(`post/posts/product/${file.name}+${ID}`).put(file);
+    var uploadTask = storageRef.child(`eposode/posts/product/${file.name}+${ID}`).put(file);
 
     uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
         (snapshot) =>{
@@ -390,16 +428,16 @@ export default function AddEpisode() {
     const onSubmitTheme = (e) => {
         e.preventDefault();
         const id = uuidv4();
-        firebase.database().ref(`/post/posts/${id}`).set({
+        firebase.database().ref(`/episode/posts/${id}`).set({
             tag:age,
-            postTitle,
-            postDetails,
+            eposodeTitle:postTitle,
+            episodeDetails:postDetails,
             companyDetails,
             highlights,
             fullStory,
             subStory,
             importantLink,
-
+            videoLinks,
             mainPostImage:logourl,
             subPostImage:logourl1,
             productImage:logourl2
@@ -413,7 +451,8 @@ export default function AddEpisode() {
             setfullStory('')
             setsubStory('')
             setimportantLink('')
-
+            setvideoLinks('')
+            setlinkVideo('')
             setlogourl('')
             setlogourl1('')
             setlogourl2('')
@@ -571,7 +610,7 @@ export default function AddEpisode() {
 <ListItemIcon>
 <DashboardIcon />
 </ListItemIcon>
-<ListItemText primary="Add Post" />
+<ListItemText primary="Add Episode" />
 </ListItem>
 </List>
 </Link>
@@ -610,7 +649,7 @@ export default function AddEpisode() {
                 <div style={{margin: 8,marginRight:500,marginLeft:200,marginTop:50}}>
                 <FormControl className={classes.formControl}>
                     <div className={classes.root} component="h2">
-                    Add Tags to Post
+                    Add Tags to Episode
                     </div> 
         <Select
           labelId="demo-controlled-open-select-label"
@@ -642,6 +681,8 @@ export default function AddEpisode() {
 
 {showFile ? (
 <div>
+<h3>Add Thumbnail</h3>
+
 <Form>
 <Form.Group>
 <Form.File type="file" id="file" label="Upload Post Image Here" onChange={handleThemeLogo}/>
@@ -657,7 +698,7 @@ Upload
 
    ) : (
         <div>
-            <Alert severity="success">Uploaded Post Main Image Here</Alert>
+            <Alert severity="success">Uploaded Episode Main Image Here</Alert>
             </div>
    )
 
@@ -671,6 +712,8 @@ Upload
 
 {showFile1 ? (
 <div>
+<h3>Add Video</h3>
+
 <Form>
 <Form.Group>
 <Form.File type="file" id="file" label="Upload Sub Image Here" onChange={handleThemeLogo1}/>
@@ -698,7 +741,7 @@ Upload
 </div>
                 </div>
                <div style={{marginTop:50}}>
-        <h3>Add Post Title</h3>
+        <h3>Add Episode Title</h3>
         <TextField
           id="outlined-full-width"
           label="Enter the Theme Title"
@@ -716,7 +759,50 @@ Upload
         />
         </div>
         <div>
-        <h3>Add Post Details</h3>
+        <h3>Add Video Linkes</h3>
+        <TextField
+          id="outlined-full-width"
+          label="Enter the Theme Title"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="Add Post Title"
+          helperText="Add Post Title Here"
+          fullWidth
+          margin="normal"
+          onChange={handlePostSection("linkVideo")}
+          value={linkVideo}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        <div className={classes.demo}>
+            <List dense={dense}>
+            
+                 {videoLinks.map((val) => {
+                     return(
+                        <ListItem>
+                        <ListItemText
+                          primary={val}
+                          secondary={secondary ? 'Secondary text' : null}
+      
+                        />
+                          </ListItem>
+                     )
+                 })
+
+                 } 
+               
+
+              
+            
+            </List>
+          </div>
+          <Button variant="contained" color="secondary" onClick={addoutubeLinks}>
+  Secondary
+</Button>
+        </div>
+        <div>
+        <h3>Add Video Details</h3>
 
         <TextField
           id="outlined-full-width"
@@ -735,28 +821,9 @@ Upload
           variant="outlined"
         />
         </div>
+     
         <div>
-        <h3>Add Company Details</h3>
-
-        <TextField
-          id="outlined-full-width"
-          label="Enter Post Details Here"
-          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="Add Post Details"
-          helperText="Add Post Details Here"
-          fullWidth
-          multiline
-          margin="normal"
-          onChange={handlePostSection("companyDetails")}
-          value={companyDetails}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-        />
-        </div>
-        <div>
-        <h3>Add Highlights</h3>
+        <h3>Add Video Stories</h3>
 
         <TextField
           id="outlined-full-width"
@@ -795,27 +862,8 @@ Upload
           variant="outlined"
         />
         </div>
-        <div>
-        <h3>Add Sub Story</h3>
-
-        <TextField
-          id="outlined-full-width"
-          label="Enter Post Details Here"
-          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="Add Post Details"
-          helperText="Add Post Details Here"
-          fullWidth
-          multiline
-          margin="normal"
-          onChange={handlePostSection("subStory")}
-          value={subStory}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-        />
-        </div>
-        <div>
+       
+        {/* <div>
 
         <div style={{marginLeft:200,marginTop:50}}>
 
@@ -864,7 +912,7 @@ Upload
           }}
           variant="outlined"
         />
-        </div>
+        </div> */}
           
         
 
