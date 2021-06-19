@@ -47,7 +47,18 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import firebase from 'firebase'
 import 'firebase/storage'
 
-
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © '}
+      <Link color="inherit" href="https://material-ui.com/">
+        Your Website
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
 
 const drawerWidth = 240;
 
@@ -168,75 +179,11 @@ const firebaseConfig = {
 
 
 
-export default function AddEpisode() {
+export default function AddEpisodeTags() {
 
-    // POST SECTOIN STATES
-
-    const [postTitle, setpostTitle] = useState('');
-    const [postDetails, setpostDetails] = useState('');
-    const [companyDetails, setcompanyDetails] = useState('');
-    const [highlights, sethighlights] = useState('');
-    const [fullStory, setfullStory] = useState('');
-    const [subStory, setsubStory] = useState('');
-
-    const [productImage, setproductImage] = useState('');
-    const [importantLink, setimportantLink] = useState('');
-
-
-
-    const handlePostSection = name => event => {
-          switch(name){
-            case 'postTitle':
-              setpostTitle(event.target.value);
-              break;
-            case 'postDetails':
-              setpostDetails(event.target.value);
-              break;
-            case 'companyDetails':
-              setcompanyDetails(event.target.value);
-              break;
-            case 'highlights':
-              sethighlights(event.target.value);
-              break;
-            case 'fullStory':
-              setfullStory(event.target.value);
-              break;
-            case 'subStory':
-              setsubStory(event.target.value);
-              break;
-            case 'importantLink':
-              setimportantLink(event.target.value);
-              break;
-
-          }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    useEffect(() => {
-      firebase.database().ref('/post/tags/').on( 'value' , snapshot => {
-        const snap = snapshot.val();
-        console.log(Object.values(snap));
-        setcoretheme(Object.values(snap));
-      })
-
-    }, [])
     
-    const getAllPostTags = () => {
+    
 
-    }
     
 
     const [coretheme, setcoretheme] = useState('');
@@ -262,27 +209,12 @@ export default function AddEpisode() {
     const [thmeTitle1, setthmeTitle1] = useState('');
 
     const [progress, setProgress] = useState(false);
-    const [progress1, setProgress1] = useState(false);
-    const [progress2, setProgress2] = useState(false);
-
-
     const [showFile, setshowFile] = useState(true)
-    const [showFile1, setshowFile1] = useState(true)
-    const [showFile2, setshowFile2] = useState(true)
-
 
     const [logourl, setlogourl] = useState('');
-    const [logourl1, setlogourl1] = useState('');
-    const [logourl2, setlogourl2] = useState('');
-
-
 
 
     const [logo, setlogo] = useState(null);
-    const [logo1, setlogo1] = useState(null);
-    const [logo2, setlogo2] = useState(null);
-
-
 
 
     const [newsTitle, setnewsTitle] = useState('');
@@ -297,22 +229,14 @@ export default function AddEpisode() {
         setlogo(e.target.files[0])
     }
 
-    const handleThemeLogo1 = (e) => {
-      setlogo1(e.target.files[0])
-  }
-
-  const handleThemeLogo2 = (e) => {
-    setlogo2(e.target.files[0])
-}
     const uploadPic = (e) => {
         e.preventDefault();
         setProgress(true)
-        const ID = uuidv4();
         setshowFile(false)
         let file = logo;
         var storage = firebase.storage();
         var storageRef = storage.ref();
-        var uploadTask = storageRef.child(`post/pic/${file.name}${ID}`).put(file);
+        var uploadTask = storageRef.child(`posts/banner/pic/${file.name}`).put(file);
 
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
             (snapshot) =>{
@@ -331,99 +255,17 @@ export default function AddEpisode() {
            }
          ) 
     }
-    const uploadPic1 = (e) => {
-      e.preventDefault();
-      setProgress1(true)
-      const ID = uuidv4();
-      setshowFile1(false)
-      let file = logo;
-      var storage = firebase.storage();
-      var storageRef = storage.ref();
-      var uploadTask = storageRef.child(`post/subpic/${file.name}${ID}`).put(file);
-
-      uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-          (snapshot) =>{
-            var progress = Math.round((snapshot.bytesTransferred/snapshot.totalBytes))*100
-
-          },(error) =>{
-            throw error
-          },() =>{
-            // uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) =>{
-      
-            uploadTask.snapshot.ref.getDownloadURL().then((url) =>{
-              setlogourl1(url)
-              setProgress1(false)
-            })
-      
-         }
-       ) 
-  }
-
-  const uploadPic2 = (e) => {
-    e.preventDefault();
-    const ID = uuidv4();
-    setProgress2(true)
-    setshowFile2(false)
-    let file = logo;
-    var storage = firebase.storage();
-    var storageRef = storage.ref();
-    var uploadTask = storageRef.child(`post/posts/product/${file.name}+${ID}`).put(file);
-
-    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-        (snapshot) =>{
-          var progress = Math.round((snapshot.bytesTransferred/snapshot.totalBytes))*100
-
-        },(error) =>{
-          throw error
-        },() =>{
-          // uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) =>{
-    
-          uploadTask.snapshot.ref.getDownloadURL().then((url) =>{
-            setlogourl2(url)
-            setProgress2(false)
-          })
-    
-       }
-     ) 
-}
 
     const onSubmitTheme = (e) => {
         e.preventDefault();
         const id = uuidv4();
-        firebase.database().ref(`/post/posts/${id}`).set({
-            tag:age,
-            postTitle,
-            postDetails,
-            companyDetails,
-            highlights,
-            fullStory,
-            subStory,
-            importantLink,
-
-            mainPostImage:logourl,
-            subPostImage:logourl1,
-            productImage:logourl2
-
+        firebase.database().ref(`/post/tags/${id}`).set({
+            tag:tags,
+            banner:logourl
         }).then(() => {
-            setAge('')
-            setpostTitle('')
-            setpostDetails('')
-            setcompanyDetails('')
-            sethighlights('')
-            setfullStory('')
-            setsubStory('')
-            setimportantLink('')
-
+            settags('')
             setlogourl('')
-            setlogourl1('')
-            setlogourl2('')
-
             setshowFile(true)
-            setshowFile1(true)
-            setshowFile2(true)
-
-
-            
             console.log("Done")
 
             return <Alert severity="warning">Uploaded</Alert>
@@ -520,7 +362,7 @@ export default function AddEpisode() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Episode Section
+            Post Section
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -554,17 +396,17 @@ export default function AddEpisode() {
     </Link>
         </List>
         <List>
-<Link to="/addepisodetags">
+<Link to="/addt">
 <ListItem button>
 <ListItemIcon>
 <DashboardIcon />
 </ListItemIcon>
-<ListItemText primary="Add Episode Banners" />
+<ListItemText primary="Add Post Banners" />
 
 </ListItem>
 </Link>
 </List>
-<Link>
+<Link to="/addpost">
 <List>
 
 <ListItem button>
@@ -603,14 +445,14 @@ export default function AddEpisode() {
 
         <div className={classes.appBarSpacer} />
 
-            <div className={classes.root} style={{marginTop:100}}>
+            {/* <div className={classes.root} style={{marginTop:100}}>
 
                 
                 <div>
                 <div style={{margin: 8,marginRight:500,marginLeft:200,marginTop:50}}>
                 <FormControl className={classes.formControl}>
                     <div className={classes.root} component="h2">
-                    Add Tags to Post
+                    Add Core Theme to the News
                     </div> 
         <Select
           labelId="demo-controlled-open-select-label"
@@ -623,8 +465,8 @@ export default function AddEpisode() {
         >
             {coretheme && coretheme.map((item,index) => {
                     return(
-                        <MenuItem value={item.tag}>
-                        <em>{item.tag}</em>
+                        <MenuItem value={item.title}>
+                        <em>{item.title}</em>
                       </MenuItem>
                     )
             })
@@ -635,16 +477,66 @@ export default function AddEpisode() {
 
       </FormControl>
                 </div>
-             
                 <div style={{margin: 8,marginRight:500,marginLeft:200,marginTop:50}}>
-               
+                <FormControl className={classes.formControl}>
+                    <div className={classes.root} component="h2">
+                    Add Category
+                    </div> 
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={openee}
+          onClose={handleClose2}
+          onOpen={handleOpen2}
+          value={agee}
+          onChange={handleChange2}
+        >
+             <MenuItem value="">
+            My Feed
+          </MenuItem>
+          <MenuItem value="All News">All News</MenuItem>
+          <MenuItem value="Top Stories">Top Stories</MenuItem>
+          <MenuItem value="Trending">Trending</MenuItem>
+          <MenuItem value="Bookmarks">Bookmarks</MenuItem>
+          <MenuItem value="Unreal">Unreal</MenuItem>
+
+
+         
+        </Select>
+      </FormControl>
+                </div>
+                <div style={{margin: 8,marginRight:500,marginLeft:200,marginTop:50}}>
+                <FormControl className={classes.formControl}>
+                    <div className={classes.root} component="h2">
+                    Add Suggested Topics
+                    </div> 
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={openeee}
+          onClose={handleClose3}
+          onOpen={handleOpen3}
+          value={ageee}
+          onChange={handleChange3}
+        >
+           {suggtheme && suggtheme.map((item,index) => {
+                    return(
+                        <MenuItem value={item.title}>
+                        <em>{item.title}</em>
+                      </MenuItem>
+                    )
+            })
+
+            }
+        </Select>
+      </FormControl>
       <div style={{marginLeft:200,marginTop:50}}>
 
 {showFile ? (
 <div>
 <Form>
 <Form.Group>
-<Form.File type="file" id="file" label="Upload Post Image Here" onChange={handleThemeLogo}/>
+<Form.File type="file" id="file" label="Upload the logo for Topic" onChange={handleThemeLogo}/>
 </Form.Group>
 </Form>
 <Button variant="contained" color="secondary" onClick={uploadPic}>
@@ -657,7 +549,7 @@ Upload
 
    ) : (
         <div>
-            <Alert severity="success">Uploaded Post Main Image Here</Alert>
+            <Alert severity="success">Logo upload done</Alert>
             </div>
    )
 
@@ -667,176 +559,43 @@ Upload
 }
 
 </div>
-<div style={{marginLeft:200,marginTop:50}}>
-
-{showFile1 ? (
-<div>
-<Form>
-<Form.Group>
-<Form.File type="file" id="file" label="Upload Sub Image Here" onChange={handleThemeLogo1}/>
-</Form.Group>
-</Form>
-<Button variant="contained" color="secondary" onClick={uploadPic1}>
-Upload
-</Button>
-</div>
-) : (
-   (progress1 && !showFile1) ? (
-    <LinearProgress />
-
-   ) : (
-        <div>
-            <Alert severity="success">Uploaded Post Main Image Here</Alert>
-            </div>
-   )
-
-   
-)
-
-}
-
-</div>
-                </div>
-               <div style={{marginTop:50}}>
-        <h3>Add Post Title</h3>
+                </div> */}
+               <div style={{marginTop:150}}>
         <TextField
           id="outlined-full-width"
           label="Enter the Theme Title"
           style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="Add Post Title"
-          helperText="Add Post Title Here"
+          placeholder="Tags with topics"
+          helperText="Add Post Tags Here"
           fullWidth
           margin="normal"
-          onChange={handlePostSection("postTitle")}
-          value={postTitle}
+          onChange={handleThemeTitle}
+          value={tags}
           InputLabelProps={{
             shrink: true,
           }}
           variant="outlined"
         />
-        </div>
-        <div>
-        <h3>Add Post Details</h3>
-
-        <TextField
-          id="outlined-full-width"
-          label="Enter Post Details Here"
-          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="Add Post Details"
-          helperText="Add Post Details Here"
-          fullWidth
-          multiline
-          margin="normal"
-          onChange={handlePostSection("postDetails")}
-          value={postDetails}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-        />
-        </div>
-        <div>
-        <h3>Add Company Details</h3>
-
-        <TextField
-          id="outlined-full-width"
-          label="Enter Post Details Here"
-          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="Add Post Details"
-          helperText="Add Post Details Here"
-          fullWidth
-          multiline
-          margin="normal"
-          onChange={handlePostSection("companyDetails")}
-          value={companyDetails}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-        />
-        </div>
-        <div>
-        <h3>Add Highlights</h3>
-
-        <TextField
-          id="outlined-full-width"
-          label="Enter Post Details Here"
-          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="Add Post Details"
-          helperText="Add Post Details Here"
-          fullWidth
-          multiline
-          margin="normal"
-          onChange={handlePostSection("highlights")}
-          value={highlights}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-        />
-        </div>
-        <div>
-        <h3>Add Full Story</h3>
-
-        <TextField
-          id="outlined-full-width"
-          label="Enter Post Details Here"
-          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="Add Post Details"
-          helperText="Add Post Details Here"
-          fullWidth
-          multiline
-          margin="normal"
-          onChange={handlePostSection("fullStory")}
-          value={fullStory}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-        />
-        </div>
-        <div>
-        <h3>Add Sub Story</h3>
-
-        <TextField
-          id="outlined-full-width"
-          label="Enter Post Details Here"
-          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="Add Post Details"
-          helperText="Add Post Details Here"
-          fullWidth
-          multiline
-          margin="normal"
-          onChange={handlePostSection("subStory")}
-          value={subStory}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-        />
-        </div>
-        <div>
-
         <div style={{marginLeft:200,marginTop:50}}>
 
-{showFile2 ? (
+{showFile ? (
 <div>
 <Form>
 <Form.Group>
-<Form.File type="file" id="file" label="Upload Post Image Here" onChange={handleThemeLogo2}/>
+<Form.File type="file" id="file" label="Upload the logo for Topic" onChange={handleThemeLogo}/>
 </Form.Group>
 </Form>
-<Button variant="contained" color="secondary" onClick={uploadPic2}>
+<Button variant="contained" color="secondary" onClick={uploadPic}>
 Upload
 </Button>
 </div>
 ) : (
-   (progress2 && !showFile2) ? (
+   (progress && !showFile) ? (
     <LinearProgress />
 
    ) : (
         <div>
-            <Alert severity="success">Uploaded Post Main Image Here</Alert>
+            <Alert severity="success">Logo upload done</Alert>
             </div>
    )
 
@@ -846,27 +605,43 @@ Upload
 }
 
 </div>
-<h3>Add Link</h3>
+        </div>
+            {/* <div>
 
-        <TextField
+            <TextField
           id="outlined-full-width"
-          label="Enter Post Details Here"
+          label="Enter the Theme Title"
           style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="Add Post Details"
-          helperText="Add Post Details Here"
+          placeholder="Topic"
+          helperText="Enter the Headlines Details"
           fullWidth
-          multiline
           margin="normal"
-          onChange={handlePostSection("importantLink")}
-          value={importantLink}
+          multiline
+          onChange={handleThemeTitle1}
+          value={thmeTitle1}
           InputLabelProps={{
             shrink: true,
           }}
           variant="outlined"
         />
-        </div>
-          
-        
+            </div>
+            <div>
+            <TextField
+          id="outlined-full-width"
+          label="Enter the Theme Title"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="URL of the news"
+          helperText="Enter the URL"
+          fullWidth
+          margin="normal"
+          onChange={handleURL}
+          value={url}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+            </div> */}
 
 
         <div style={{marginLeft:500,marginTop:15}}>
@@ -874,9 +649,6 @@ Upload
   Upload
 </Button>
         </div>
-        </div>
-        </div>
-
                     </div>
           
 
