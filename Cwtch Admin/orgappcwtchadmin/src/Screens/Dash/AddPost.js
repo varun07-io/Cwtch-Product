@@ -181,11 +181,66 @@ const firebaseConfig = {
 
 export default function AddPost() {
 
+    // POST SECTOIN STATES
+
+    const [postTitle, setpostTitle] = useState('');
+    const [postDetails, setpostDetails] = useState('');
+    const [companyDetails, setcompanyDetails] = useState('');
+    const [highlights, sethighlights] = useState('');
+    const [fullStory, setfullStory] = useState('');
+    const [subStory, setsubStory] = useState('');
+
+    const [productImage, setproductImage] = useState('');
+    const [importantLink, setimportantLink] = useState('');
+
+
+
+    const handlePostSection = name => event => {
+          switch(name){
+            case 'postTitle':
+              setpostTitle(event.target.value);
+              break;
+            case 'postDetails':
+              setpostDetails(event.target.value);
+              break;
+            case 'companyDetails':
+              setcompanyDetails(event.target.value);
+              break;
+            case 'highlights':
+              sethighlights(event.target.value);
+              break;
+            case 'fullStory':
+              setfullStory(event.target.value);
+              break;
+            case 'subStory':
+              setsubStory(event.target.value);
+              break;
+            case 'importantLink':
+              setimportantLink(event.target.value);
+              break;
+
+          }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     useEffect(() => {
       firebase.database().ref('/post/tags/').on( 'value' , snapshot => {
         const snap = snapshot.val();
         console.log(Object.values(snap));
-        setcoretheme(Object.values(snap))
+        setcoretheme(Object.values(snap));
       })
 
     }, [])
@@ -219,18 +274,25 @@ export default function AddPost() {
 
     const [progress, setProgress] = useState(false);
     const [progress1, setProgress1] = useState(false);
+    const [progress2, setProgress2] = useState(false);
+
 
     const [showFile, setshowFile] = useState(true)
     const [showFile1, setshowFile1] = useState(true)
+    const [showFile2, setshowFile2] = useState(true)
 
 
     const [logourl, setlogourl] = useState('');
     const [logourl1, setlogourl1] = useState('');
+    const [logourl2, setlogourl2] = useState('');
+
 
 
 
     const [logo, setlogo] = useState(null);
     const [logo1, setlogo1] = useState(null);
+    const [logo2, setlogo2] = useState(null);
+
 
 
 
@@ -250,14 +312,18 @@ export default function AddPost() {
       setlogo1(e.target.files[0])
   }
 
+  const handleThemeLogo2 = (e) => {
+    setlogo2(e.target.files[0])
+}
     const uploadPic = (e) => {
         e.preventDefault();
         setProgress(true)
+        const ID = uuidv4();
         setshowFile(false)
         let file = logo;
         var storage = firebase.storage();
         var storageRef = storage.ref();
-        var uploadTask = storageRef.child(`post/pic/${file.name}`).put(file);
+        var uploadTask = storageRef.child(`post/pic/${file.name}${ID}`).put(file);
 
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
             (snapshot) =>{
@@ -279,11 +345,12 @@ export default function AddPost() {
     const uploadPic1 = (e) => {
       e.preventDefault();
       setProgress1(true)
+      const ID = uuidv4();
       setshowFile1(false)
       let file = logo;
       var storage = firebase.storage();
       var storageRef = storage.ref();
-      var uploadTask = storageRef.child(`post/subpic/${file.name}`).put(file);
+      var uploadTask = storageRef.child(`post/subpic/${file.name}${ID}`).put(file);
 
       uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
           (snapshot) =>{
@@ -303,13 +370,71 @@ export default function AddPost() {
        ) 
   }
 
+  const uploadPic2 = (e) => {
+    e.preventDefault();
+    const ID = uuidv4();
+    setProgress2(true)
+    setshowFile2(false)
+    let file = logo;
+    var storage = firebase.storage();
+    var storageRef = storage.ref();
+    var uploadTask = storageRef.child(`post/posts/product/${file.name}+${ID}`).put(file);
+
+    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+        (snapshot) =>{
+          var progress = Math.round((snapshot.bytesTransferred/snapshot.totalBytes))*100
+
+        },(error) =>{
+          throw error
+        },() =>{
+          // uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) =>{
+    
+          uploadTask.snapshot.ref.getDownloadURL().then((url) =>{
+            setlogourl2(url)
+            setProgress2(false)
+          })
+    
+       }
+     ) 
+}
+
     const onSubmitTheme = (e) => {
         e.preventDefault();
         const id = uuidv4();
-        firebase.database().ref(`/post/tags/`).set({
-            tag:tags
+        firebase.database().ref(`/post/posts/${id}`).set({
+            tag:age,
+            postTitle,
+            postDetails,
+            companyDetails,
+            highlights,
+            fullStory,
+            subStory,
+            importantLink,
+
+            mainPostImage:logourl,
+            subPostImage:logourl1,
+            productImage:logourl2
+
         }).then(() => {
-            settags('')
+            setAge('')
+            setpostTitle('')
+            setpostDetails('')
+            setcompanyDetails('')
+            sethighlights('')
+            setfullStory('')
+            setsubStory('')
+            setimportantLink('')
+
+            setlogourl('')
+            setlogourl1('')
+            setlogourl2('')
+
+            setshowFile(true)
+            setshowFile1(true)
+            setshowFile2(true)
+
+
+            
             console.log("Done")
 
             return <Alert severity="warning">Uploaded</Alert>
@@ -583,59 +708,176 @@ Upload
 
 </div>
                 </div>
-               <div style={{marginTop:150}}>
+               <div style={{marginTop:50}}>
+        <h3>Add Post Title</h3>
         <TextField
           id="outlined-full-width"
           label="Enter the Theme Title"
           style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="Tags with topics"
-          helperText="Add Post Tags Here"
+          placeholder="Add Post Title"
+          helperText="Add Post Title Here"
           fullWidth
           margin="normal"
-          onChange={handleThemeTitle}
-          value={tags}
+          onChange={handlePostSection("postTitle")}
+          value={postTitle}
           InputLabelProps={{
             shrink: true,
           }}
           variant="outlined"
         />
         </div>
-            <div>
+        <div>
+        <h3>Add Post Details</h3>
 
-            <TextField
+        <TextField
           id="outlined-full-width"
-          label="Enter the Theme Title"
+          label="Enter Post Details Here"
           style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="Topic"
-          helperText="Enter the Headlines Details"
+          placeholder="Add Post Details"
+          helperText="Add Post Details Here"
           fullWidth
-          margin="normal"
           multiline
-          onChange={handleThemeTitle1}
-          value={thmeTitle1}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-        />
-            </div>
-            <div>
-            <TextField
-          id="outlined-full-width"
-          label="Enter the Theme Title"
-          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="URL of the news"
-          helperText="Enter the URL"
-          fullWidth
           margin="normal"
-          onChange={handleURL}
-          value={url}
+          onChange={handlePostSection("postDetails")}
+          value={postDetails}
           InputLabelProps={{
             shrink: true,
           }}
           variant="outlined"
         />
+        </div>
+        <div>
+        <h3>Add Company Details</h3>
+
+        <TextField
+          id="outlined-full-width"
+          label="Enter Post Details Here"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="Add Post Details"
+          helperText="Add Post Details Here"
+          fullWidth
+          multiline
+          margin="normal"
+          onChange={handlePostSection("companyDetails")}
+          value={companyDetails}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        </div>
+        <div>
+        <h3>Add Highlights</h3>
+
+        <TextField
+          id="outlined-full-width"
+          label="Enter Post Details Here"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="Add Post Details"
+          helperText="Add Post Details Here"
+          fullWidth
+          multiline
+          margin="normal"
+          onChange={handlePostSection("highlights")}
+          value={highlights}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        </div>
+        <div>
+        <h3>Add Full Story</h3>
+
+        <TextField
+          id="outlined-full-width"
+          label="Enter Post Details Here"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="Add Post Details"
+          helperText="Add Post Details Here"
+          fullWidth
+          multiline
+          margin="normal"
+          onChange={handlePostSection("fullStory")}
+          value={fullStory}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        </div>
+        <div>
+        <h3>Add Sub Story</h3>
+
+        <TextField
+          id="outlined-full-width"
+          label="Enter Post Details Here"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="Add Post Details"
+          helperText="Add Post Details Here"
+          fullWidth
+          multiline
+          margin="normal"
+          onChange={handlePostSection("subStory")}
+          value={subStory}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        </div>
+        <div>
+
+        <div style={{marginLeft:200,marginTop:50}}>
+
+{showFile2 ? (
+<div>
+<Form>
+<Form.Group>
+<Form.File type="file" id="file" label="Upload Post Image Here" onChange={handleThemeLogo2}/>
+</Form.Group>
+</Form>
+<Button variant="contained" color="secondary" onClick={uploadPic2}>
+Upload
+</Button>
+</div>
+) : (
+   (progress2 && !showFile2) ? (
+    <LinearProgress />
+
+   ) : (
+        <div>
+            <Alert severity="success">Uploaded Post Main Image Here</Alert>
             </div>
+   )
+
+   
+)
+
+}
+
+</div>
+<h3>Add Link</h3>
+
+        <TextField
+          id="outlined-full-width"
+          label="Enter Post Details Here"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="Add Post Details"
+          helperText="Add Post Details Here"
+          fullWidth
+          multiline
+          margin="normal"
+          onChange={handlePostSection("importantLink")}
+          value={importantLink}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        </div>
+          
+        
 
 
         <div style={{marginLeft:500,marginTop:15}}>
