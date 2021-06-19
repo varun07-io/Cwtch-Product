@@ -2,7 +2,7 @@ import React from 'react';
 import {Route, Switch, BrowserRouter} from 'react-router-dom'
 import AddPostTags from './Screens/Dash/AddPostTags';
 import AddPost from './Screens/Dash/AddPost';
-
+import AddEpisode from './Screens/Dash/AddEpisode';
 import Dash from "./Screens/Dash/Dashboard"
 
 const Routes = () => {
@@ -15,6 +15,8 @@ const Routes = () => {
                 // Post Home
                 <Route path="/addposthome" exact component={AddPostTags}/>
                     <Route path="/addpost" exact component={AddPost}/>
+                    <Route path="/addepisode" exact component={AddEpisode}/>
+
 
 
             </Switch>

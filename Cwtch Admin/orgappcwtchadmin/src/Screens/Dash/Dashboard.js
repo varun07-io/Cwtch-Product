@@ -195,7 +195,7 @@ export default function Dashboard() {
 </ListItem>
 </Link>
 </List>
-<Link>
+<Link to="/addepisode">
 <List>
 
 <ListItem button>
