@@ -236,7 +236,7 @@ export default function AddEpisodeTags() {
         let file = logo;
         var storage = firebase.storage();
         var storageRef = storage.ref();
-        var uploadTask = storageRef.child(`posts/banner/pic/${file.name}`).put(file);
+        var uploadTask = storageRef.child(`episode/banner/pic/${file.name}`).put(file);
 
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
             (snapshot) =>{
@@ -259,7 +259,7 @@ export default function AddEpisodeTags() {
     const onSubmitTheme = (e) => {
         e.preventDefault();
         const id = uuidv4();
-        firebase.database().ref(`/post/tags/${id}`).set({
+        firebase.database().ref(`/episode/tags/${id}`).set({
             tag:tags,
             banner:logourl
         }).then(() => {
@@ -362,7 +362,7 @@ export default function AddEpisodeTags() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Post Section
+            Episode Section
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -565,8 +565,8 @@ Upload
           id="outlined-full-width"
           label="Enter the Theme Title"
           style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="Tags with topics"
-          helperText="Add Post Tags Here"
+          placeholder="Tags Episode with topics"
+          helperText="Add Episode Tags Here"
           fullWidth
           margin="normal"
           onChange={handleThemeTitle}
