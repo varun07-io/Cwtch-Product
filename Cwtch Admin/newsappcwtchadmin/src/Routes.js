@@ -9,6 +9,7 @@ import Dashboard from './Screen/Dash/Dashboard';
 import AddTheme from './Screen/Dash/AddTheme';
 import AddSuggestionTopics from './Screen/Dash/AddSuggestionTopics';
 import AddNews from './Screen/Dash/AddNews';
+import AddAdvertisment from './Screen/Dash/AddAdvertisment';
 
 const Routes = () => {
 
@@ -21,6 +22,10 @@ const Routes = () => {
                     <Route exact path="/adds" component={AddSuggestionTopics}/>
 
                     <Route exact path="/addnews" component={AddNews}/>
+
+
+                    <Route exact path="/addads" component={AddAdvertisment}/>
+
 
 
 
