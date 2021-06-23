@@ -195,15 +195,18 @@ export default function Dashboard() {
 </ListItem>
 </Link>
 </List>
+
+<Link to="/addads">
 <List>
 
 <ListItem button>
 <ListItemIcon>
 <DashboardIcon />
 </ListItemIcon>
-<ListItemText primary="Dashboard" />
+<ListItemText primary="Add Advertisement" />
 </ListItem>
 </List>
+</Link>
 <List>
 
 <ListItem button>
