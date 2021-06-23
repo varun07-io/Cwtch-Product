@@ -259,6 +259,7 @@ export default function AddNews() {
         e.preventDefault();
         const id = uuidv4();
         firebase.database().ref(`/news/${id}`).set({
+            id,
             newsTitle: thmeTitle,
             newsDetails:thmeTitle1,
             core:age,
