@@ -268,7 +268,8 @@ export default function AddNews() {
             category: agee,
             suggested: ageee,
             pic:logourl,
-            url:url
+            url:url,
+            location:ageeo
         }).then(() => {
             setthmeTitle('')
             setthmeTitle1('')
@@ -279,6 +280,7 @@ export default function AddNews() {
             seturl('')
             setAgee('')
             setAgeee('')
+            setAgeeo('')
 
             return <Alert severity="warning">Uploaded</Alert>
         }).catch(err => {
@@ -300,11 +302,13 @@ export default function AddNews() {
 
 
     const [opene, setopene] = useState(false)
+    const [oopenee, setoopenee] = useState(false)
     const [openee, setopenee] = useState(false)
     const [openeee, setopeneee] = useState(false)
     const [age, setAge] = useState('');
     const [agee, setAgee] = useState('');
     const [ageee, setAgeee] = useState('');
+    const [ageeo, setAgeeo] = useState('');
 
     const [url, seturl] = useState('');
     const handleChange1 = (event) => {
@@ -314,7 +318,17 @@ export default function AddNews() {
       const handleClose1 = () => {
         setopene(false);
       };
+      const handleChange2o = (event) => {
+        setAgeeo(event.target.value);
+      };
+      const handleClose2o = () => {
+        setoopenee(false);
+      };
 
+       
+      const handleOpen2o = () => {
+        setoopenee(true);
+      };
       const handleURL = (e) => {
         seturl(e.target.value)
       }
@@ -557,6 +571,66 @@ Upload
 }
 
 </div>
+
+<div className={classes.root} style={{marginTop:100,marginLeft:500}}>
+        <FormControl className={classes.formControl}>
+                    <div className={classes.root} component="h2">
+                    Add Location
+                    </div> 
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={oopenee}
+          onClose={handleClose2o}
+          onOpen={handleOpen2o}
+          value={ageeo}
+          onChange={handleChange2o}
+        >
+             <MenuItem value="all">
+            All Location
+          </MenuItem>
+
+<MenuItem value="Theni">Theni</MenuItem>
+<MenuItem value="Coimbatore">Coimbatore</MenuItem>
+<MenuItem value="Ariyalur">Ariyalur</MenuItem>
+<MenuItem value="Chengalpattu">Chengalpattu</MenuItem>
+<MenuItem value="Chennai">Chennai</MenuItem>
+<MenuItem value="Cuddalore">Cuddalore</MenuItem>
+<MenuItem value="Dharmapuri">Dharmapuri</MenuItem>
+<MenuItem value="Dindigul">Dindigul</MenuItem>
+<MenuItem value="Erode">Erode</MenuItem>
+<MenuItem value="Kallakurichi">Kallakurichi</MenuItem>
+<MenuItem value="Kanchipuram">Kanchipuram</MenuItem>
+<MenuItem value="Kanyakumari">Kanyakumari</MenuItem>
+<MenuItem value="Karur">Karur</MenuItem>
+<MenuItem value="Krishnagiri">Krishnagiri</MenuItem>
+<MenuItem value="Madurai">Madurai</MenuItem>
+<MenuItem value="Nagapattinam">Nagapattinam</MenuItem>
+<MenuItem value="Namakkal">Namakkal</MenuItem>
+<MenuItem value="Nilgiris">Nilgiris</MenuItem>
+<MenuItem value="Perambalur">Perambalur</MenuItem>
+<MenuItem value="Pudukkottai">Pudukkottai</MenuItem>
+<MenuItem value="Ramanathapuram">Ramanathapuram</MenuItem>
+<MenuItem value="Ranipet">Ranipet</MenuItem>
+<MenuItem value="Salem">Salem</MenuItem>
+<MenuItem value="Sivaganga">Sivaganga</MenuItem>
+<MenuItem value="Tenkasi">Tenkasi</MenuItem>
+<MenuItem value="Tuticorin">Tuticorin</MenuItem>
+<MenuItem value="Thanjavur">Thanjavur</MenuItem>
+<MenuItem value="Tirupathur">Tirupathur</MenuItem>
+<MenuItem value="Tiruchirappalli">Tiruchirappalli</MenuItem>
+<MenuItem value="Tenkasi">Tenkasi</MenuItem>
+<MenuItem value="Tiruvallur">Tiruvallur</MenuItem>
+<MenuItem value="Tiruvannamalai">Tiruvannamalai</MenuItem>
+<MenuItem value="Tiruvarur">Tiruvarur</MenuItem>
+<MenuItem value="Vellore">Vellore</MenuItem>
+<MenuItem value="Viluppuram">Viluppuram</MenuItem>
+<MenuItem value="Virudhunagar">Virudhunagar</MenuItem>
+
+         
+        </Select>
+      </FormControl>
+        </div>
                 </div>
                
         <TextField
