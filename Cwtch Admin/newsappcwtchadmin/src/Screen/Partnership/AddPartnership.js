@@ -19,16 +19,20 @@ import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './listitems';
+import { mainListItems, secondaryListItems } from '../Dash/listitems';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Chart from './Chart';
-import Deposits from './Deposits';
-import Orders from './Orders';
+import Chart from '../Dash/Chart';
+import Deposits from '../Dash/Deposits';
+import Orders from '../Dash/Orders';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -184,6 +188,7 @@ export default function AddPartnership() {
     const [logourl, setlogourl] = useState('');
     const [logo, setlogo] = useState(null);
 
+    const [agee, setAgee] = useState('');
 
     const handleThemeLogo = (e) => {
         setlogo(e.target.files[0])
@@ -234,16 +239,18 @@ export default function AddPartnership() {
         }
 
 
-        firebase.database().ref(`/news/${id}`).set(
+        firebase.database().ref(`/partnership/${thmeTitle}`).set(
             {
-                type: 'ads',
-                advertisment: logourl,
-                url:themeColor
+                name: thmeTitle,
+                logo: logourl,
+                description:themeColor,
+                location:agee
             }
         ).then(() => {
             setthmeTitle('')
             setlogourl('')
             setlogo(null)
+            setAgee('')
             setthemeColor('')
 
     setshowFile(true)
@@ -273,6 +280,8 @@ export default function AddPartnership() {
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const [openee, setopenee] = useState(false)
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -282,9 +291,17 @@ export default function AddPartnership() {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
 
+  const handleClose2 = () => {
+    setopenee(false);
+  };
 
+  const handleOpen2 = () => {
+    setopenee(true);
+  };
 
-
+  const handleChange2 = (event) => {
+    setAgee(event.target.value);
+  };
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -300,7 +317,7 @@ export default function AddPartnership() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Core Theme
+            Add Partnership Section
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -376,10 +393,10 @@ export default function AddPartnership() {
                 <div>
         <TextField
           id="outlined-full-width"
-          label="Enter the Theme Title"
+          label="Enter Vendor Name"
           style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="Enter the Advertisement Details"
-          helperText="Advertisement Details"
+          placeholder="Enter the Partner Name"
+          helperText="Vendor"
           fullWidth
           margin="normal"
           onChange={handleThemeTitle}
@@ -389,13 +406,72 @@ export default function AddPartnership() {
           }}
           variant="outlined"
         />
+        <div className={classes.root} style={{marginTop:100,marginLeft:500}}>
+        <FormControl className={classes.formControl}>
+                    <div className={classes.root} component="h2">
+                    Add Location
+                    </div> 
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={openee}
+          onClose={handleClose2}
+          onOpen={handleOpen2}
+          value={agee}
+          onChange={handleChange2}
+        >
+             <MenuItem value="all">
+            All Location
+          </MenuItem>
+
+<MenuItem value="Theni">Theni</MenuItem>
+<MenuItem value="Coimbatore">Coimbatore</MenuItem>
+<MenuItem value="Ariyalur">Ariyalur</MenuItem>
+<MenuItem value="Chengalpattu">Chengalpattu</MenuItem>
+<MenuItem value="Chennai">Chennai</MenuItem>
+<MenuItem value="Cuddalore">Cuddalore</MenuItem>
+<MenuItem value="Dharmapuri">Dharmapuri</MenuItem>
+<MenuItem value="Dindigul">Dindigul</MenuItem>
+<MenuItem value="Erode">Erode</MenuItem>
+<MenuItem value="Kallakurichi">Kallakurichi</MenuItem>
+<MenuItem value="Kanchipuram">Kanchipuram</MenuItem>
+<MenuItem value="Kanyakumari">Kanyakumari</MenuItem>
+<MenuItem value="Karur">Karur</MenuItem>
+<MenuItem value="Krishnagiri">Krishnagiri</MenuItem>
+<MenuItem value="Madurai">Madurai</MenuItem>
+<MenuItem value="Nagapattinam">Nagapattinam</MenuItem>
+<MenuItem value="Namakkal">Namakkal</MenuItem>
+<MenuItem value="Nilgiris">Nilgiris</MenuItem>
+<MenuItem value="Perambalur">Perambalur</MenuItem>
+<MenuItem value="Pudukkottai">Pudukkottai</MenuItem>
+<MenuItem value="Ramanathapuram">Ramanathapuram</MenuItem>
+<MenuItem value="Ranipet">Ranipet</MenuItem>
+<MenuItem value="Salem">Salem</MenuItem>
+<MenuItem value="Sivaganga">Sivaganga</MenuItem>
+<MenuItem value="Tenkasi">Tenkasi</MenuItem>
+<MenuItem value="Tuticorin">Tuticorin</MenuItem>
+<MenuItem value="Thanjavur">Thanjavur</MenuItem>
+<MenuItem value="Tirupathur">Tirupathur</MenuItem>
+<MenuItem value="Tiruchirappalli">Tiruchirappalli</MenuItem>
+<MenuItem value="Tenkasi">Tenkasi</MenuItem>
+<MenuItem value="Tiruvallur">Tiruvallur</MenuItem>
+<MenuItem value="Tiruvannamalai">Tiruvannamalai</MenuItem>
+<MenuItem value="Tiruvarur">Tiruvarur</MenuItem>
+<MenuItem value="Vellore">Vellore</MenuItem>
+<MenuItem value="Viluppuram">Viluppuram</MenuItem>
+<MenuItem value="Virudhunagar">Virudhunagar</MenuItem>
+
+         
+        </Select>
+      </FormControl>
+        </div>
          <div>
         <TextField
           id="outlined-full-width"
-          label="Enter the Theme Title"
+          label="Enter the Partner Description"
           style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="Enter the URL for the ad"
-          helperText="Theme color"
+          placeholder="Enter Description"
+          helperText="About them"
           fullWidth
           margin="normal"
           onChange={handleThemeColor}
@@ -425,7 +501,7 @@ export default function AddPartnership() {
 
                ) : (
                     <div>
-                        <Alert severity="success">Advertisement Image Upload Done</Alert>
+                        <Alert severity="success">Their Logo</Alert>
                         </div>
                )
 
