@@ -186,6 +186,8 @@ export default function AddVideoNews() {
      
         getCoreTheme()
         getSuggestedTopic()
+        getPartners()
+
 
     }, [])
     
@@ -193,7 +195,15 @@ export default function AddVideoNews() {
     const [coretheme, setcoretheme] = useState('');
     const [suggtheme, setsuggtheme] = useState('');
 
-
+    const [partners, setpartners] = useState('');
+    
+    const getPartners = () => {
+      firebase.database().ref('/partnership').on( 'value' , snapshot => {
+        const snap = snapshot.val();
+        console.log(snap);
+        setpartners(Object.values(snap))
+    })
+    }
     const getCoreTheme = () => {
         firebase.database().ref('/theme').on( 'value' , snapshot => {
             const snap = snapshot.val();
@@ -279,6 +289,7 @@ export default function AddVideoNews() {
             seturl('')
             setAgee('')
             setAgeee('')
+            setpAge('')
 
             return <Alert severity="warning">Uploaded</Alert>
         }).catch(err => {
@@ -298,6 +309,7 @@ export default function AddVideoNews() {
     }
 
 
+    const [popene, setpopene] = useState(false)
 
     const [opene, setopene] = useState(false)
     const [openee, setopenee] = useState(false)
@@ -305,6 +317,7 @@ export default function AddVideoNews() {
     const [age, setAge] = useState('');
     const [agee, setAgee] = useState('');
     const [ageee, setAgeee] = useState('');
+    const [page, setpAge] = useState('');
 
     const [url, seturl] = useState('');
     const handleChange1 = (event) => {
@@ -344,6 +357,15 @@ export default function AddVideoNews() {
       const handleOpen3 = () => {
         setopeneee(true);
       };
+      const phandleClose1 = () => {
+        setpopene(false);
+      };
+const phandleChange1 = (event) => {
+        setpAge(event.target.value);
+      };
+const phandleOpen1 = () => {
+        setpopene(true);
+      };
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -374,7 +396,7 @@ export default function AddVideoNews() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            News
+            Video News
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -465,6 +487,34 @@ export default function AddVideoNews() {
                     return(
                         <MenuItem value={item.title}>
                         <em>{item.title}</em>
+                      </MenuItem>
+                    )
+            })
+
+            }
+    
+        </Select>
+
+      </FormControl>
+                </div>
+                <div style={{margin: 8,marginRight:500,marginLeft:200,marginTop:50}}>
+                <FormControl className={classes.formControl}>
+                    <div className={classes.root} component="h2">
+                    From Partner
+                    </div> 
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={popene}
+          onClose={phandleClose1}
+          onOpen={phandleOpen1}
+          value={page}
+          onChange={phandleChange1}
+        >
+            {partners && partners.map((item,index) => {
+                    return(
+                        <MenuItem value={item.name}>
+                        <em>{item.name}</em>
                       </MenuItem>
                     )
             })
