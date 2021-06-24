@@ -2,6 +2,8 @@
 import React,{useState} from 'react'
 import {Form,Col,Row,Image} from 'react-bootstrap'
 import clsx from 'clsx';
+import { v4 as uuidv4 } from 'uuid'
+
 import { Link } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -173,13 +175,14 @@ var firebaseConfig = {
 
 
 
-export default function AddTheme() {
+export default function AddQuotes() {
 
 
     const [thmeTitle, setthmeTitle] = useState('');
     const [progress, setProgress] = useState(false);
     const [showFile, setshowFile] = useState(true)
     const [themeColor, setthemeColor] = useState('');
+    const [by, setby] = useState('')
 
     const [logourl, setlogourl] = useState('');
 
@@ -198,37 +201,15 @@ export default function AddTheme() {
       setthemeColor(event.target.value);
   }
 
-    const uploadPic = (e) => {
-        e.preventDefault();
-        setProgress(true)
-        setshowFile(false)
-        let file = logo;
-        var storage = firebase.storage();
-        var storageRef = storage.ref();
-        var uploadTask = storageRef.child(`theme/logo/${file.name}`).put(file);
+  const handleBy = (event) => {
+    setby(event.target.value);
+}
 
-        uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-            (snapshot) =>{
-              var progress = Math.round((snapshot.bytesTransferred/snapshot.totalBytes))*100
-
-            },(error) =>{
-              throw error
-            },() =>{
-              // uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) =>{
-        
-              uploadTask.snapshot.ref.getDownloadURL().then((url) =>{
-                setlogourl(url)
-                setProgress(false)
-              })
-        
-           }
-         ) 
-    }
 
     const onSubmitTheme = (e) => {
         e.preventDefault();    
         console.log("Here");
-
+        const id = uuidv4();
         if(thmeTitle.length <= 1 && !logourl){
             return(
 <Alert severity="warning">Fill all fields</Alert>
@@ -236,15 +217,18 @@ export default function AddTheme() {
         }
 
 
-        firebase.database().ref(`/theme/${thmeTitle}`).set(
+        firebase.database().ref(`/news/${id}`).set(
             {
                 title: thmeTitle,
+                by:by,
+                type:'quotes',
                 logo: logourl,
                 color:themeColor
             }
         ).then(() => {
             setthmeTitle('')
             setlogourl('')
+            setby('')
             setlogo(null)
             setthemeColor('')
 
@@ -302,7 +286,7 @@ export default function AddTheme() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Core Theme
+            Add Quotes
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -396,10 +380,10 @@ export default function AddTheme() {
                 <div>
         <TextField
           id="outlined-full-width"
-          label="Enter the Theme Title"
+          label="Enter the Quotes"
           style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
-          placeholder="Theme title"
-          helperText="Theme title is important"
+          placeholder="Add Quotes"
+          helperText="Quotes for Today"
           fullWidth
           margin="normal"
           onChange={handleThemeTitle}
@@ -412,7 +396,24 @@ export default function AddTheme() {
          <div>
         <TextField
           id="outlined-full-width"
-          label="Enter the Theme Title"
+          label="Enter By thome"
+          style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+          placeholder="By"
+          helperText="By"
+          fullWidth
+          margin="normal"
+          onChange={handleBy}
+          value={by}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        </div>
+        <div>
+        <TextField
+          id="outlined-full-width"
+          label="Enter the Theme Title for quotes"
           style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
           placeholder="Color for design"
           helperText="Theme color"
@@ -426,7 +427,7 @@ export default function AddTheme() {
           variant="outlined"
         />
         </div>
-        <div style={{marginLeft:200,marginTop:50}}>
+        {/* <div style={{marginLeft:200,marginTop:50}}>
 
             {showFile ? (
 <div>
@@ -454,7 +455,7 @@ export default function AddTheme() {
 
             }
  
-        </div>
+        </div> */}
 
         <div style={{marginLeft:500,marginTop:60}}>
         <Button variant="contained" color="primary"  onClick={onSubmitTheme}>
