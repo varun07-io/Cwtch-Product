@@ -10,6 +10,9 @@ import AddTheme from './Screen/Dash/AddTheme';
 import AddSuggestionTopics from './Screen/Dash/AddSuggestionTopics';
 import AddNews from './Screen/Dash/AddNews';
 import AddAdvertisment from './Screen/Dash/AddAdvertisment';
+import AddVideoNews from './Screen/Dash/AddVideoNews';
+
+import AddPartnership from './Screen/Partnership/AddPartnership';
 
 const Routes = () => {
 
@@ -22,9 +25,18 @@ const Routes = () => {
                     <Route exact path="/adds" component={AddSuggestionTopics}/>
 
                     <Route exact path="/addnews" component={AddNews}/>
+                    <Route exact path="/addvnews" component={AddVideoNews}/>
 
 
                     <Route exact path="/addads" component={AddAdvertisment}/>
+
+
+
+
+                    {/* <Route exact path="/partnership" component={AddAdvertisment}/> */}
+                    <Route exact path="/addpartnership" component={AddPartnership}/>
+
+
 
 
 

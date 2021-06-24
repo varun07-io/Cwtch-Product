@@ -207,15 +207,17 @@ export default function Dashboard() {
 </ListItem>
 </List>
 </Link>
+<Link to="/addpartnership">
 <List>
 
 <ListItem button>
 <ListItemIcon>
 <DashboardIcon />
 </ListItemIcon>
-<ListItemText primary="Dashboard" />
+<ListItemText primary="Add Partnership" />
 </ListItem>
 </List>
+</Link>
 
 
         <Divider />

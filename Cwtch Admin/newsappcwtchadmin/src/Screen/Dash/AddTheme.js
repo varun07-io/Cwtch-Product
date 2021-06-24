@@ -366,6 +366,17 @@ export default function AddTheme() {
 </ListItem>
 </List>
 </Link>
+<Link to="/addvnews">
+<List>
+
+<ListItem button>
+<ListItemIcon>
+<DashboardIcon />
+</ListItemIcon>
+<ListItemText primary="Add Video News" />
+</ListItem>
+</List>
+</Link>
 
 
         <Divider />
