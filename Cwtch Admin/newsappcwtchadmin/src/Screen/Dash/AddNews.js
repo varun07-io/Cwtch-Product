@@ -186,9 +186,20 @@ export default function AddNews() {
      
         getCoreTheme()
         getSuggestedTopic()
+        getPartners()
 
     }, [])
+
+    const [partners, setpartners] = useState('');
     
+    const getPartners = () => {
+      firebase.database().ref('/partnership').on( 'value' , snapshot => {
+        const snap = snapshot.val();
+        console.log(snap);
+        setpartners(Object.values(snap))
+    })
+    }
+
 
     const [coretheme, setcoretheme] = useState('');
     const [suggtheme, setsuggtheme] = useState('');
@@ -269,6 +280,7 @@ export default function AddNews() {
             suggested: ageee,
             pic:logourl,
             url:url,
+            from:page,
             location:ageeo
         }).then(() => {
             setthmeTitle('')
@@ -281,6 +293,7 @@ export default function AddNews() {
             setAgee('')
             setAgeee('')
             setAgeeo('')
+            setpAge('')
 
             return <Alert severity="warning">Uploaded</Alert>
         }).catch(err => {
@@ -302,10 +315,14 @@ export default function AddNews() {
 
 
     const [opene, setopene] = useState(false)
+    const [popene, setpopene] = useState(false)
+
     const [oopenee, setoopenee] = useState(false)
     const [openee, setopenee] = useState(false)
     const [openeee, setopeneee] = useState(false)
     const [age, setAge] = useState('');
+    const [page, setpAge] = useState('');
+
     const [agee, setAgee] = useState('');
     const [ageee, setAgeee] = useState('');
     const [ageeo, setAgeeo] = useState('');
@@ -318,13 +335,19 @@ export default function AddNews() {
       const handleClose1 = () => {
         setopene(false);
       };
+        
+      const phandleClose1 = () => {
+        setpopene(false);
+      };
       const handleChange2o = (event) => {
         setAgeeo(event.target.value);
       };
       const handleClose2o = () => {
         setoopenee(false);
       };
-
+      const phandleChange1 = (event) => {
+        setpAge(event.target.value);
+      };
        
       const handleOpen2o = () => {
         setoopenee(true);
@@ -335,6 +358,10 @@ export default function AddNews() {
     
       const handleOpen1 = () => {
         setopene(true);
+      };
+      
+      const phandleOpen1 = () => {
+        setpopene(true);
       };
       const handleChange2 = (event) => {
         setAgee(event.target.value);
@@ -479,6 +506,34 @@ export default function AddNews() {
                     return(
                         <MenuItem value={item.title}>
                         <em>{item.title}</em>
+                      </MenuItem>
+                    )
+            })
+
+            }
+    
+        </Select>
+
+      </FormControl>
+                </div>
+                <div style={{margin: 8,marginRight:500,marginLeft:200,marginTop:50}}>
+                <FormControl className={classes.formControl}>
+                    <div className={classes.root} component="h2">
+                    From Partner
+                    </div> 
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={popene}
+          onClose={phandleClose1}
+          onOpen={phandleOpen1}
+          value={page}
+          onChange={phandleChange1}
+        >
+            {partners && partners.map((item,index) => {
+                    return(
+                        <MenuItem value={item.name}>
+                        <em>{item.name}</em>
                       </MenuItem>
                     )
             })
