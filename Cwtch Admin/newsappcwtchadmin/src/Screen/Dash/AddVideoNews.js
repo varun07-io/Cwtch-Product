@@ -271,6 +271,7 @@ export default function AddVideoNews() {
         firebase.database().ref(`/news/${id}`).set({
             id,
             type:'video',
+            time:Date.now(),
             opnion:[],
             newsTitle: thmeTitle,
             newsDetails:thmeTitle1,

@@ -272,6 +272,7 @@ export default function AddNews() {
         firebase.database().ref(`/news/${id}`).set({
             id,
             type:'news',
+            time:Date.now(),
             opnion:[],
             newsTitle: thmeTitle,
             newsDetails:thmeTitle1,
