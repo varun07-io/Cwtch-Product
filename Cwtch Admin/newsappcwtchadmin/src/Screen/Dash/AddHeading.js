@@ -246,7 +246,7 @@ export default function AddHeading() {
         let file = logo;
         var storage = firebase.storage();
         var storageRef = storage.ref();
-        var uploadTask = storageRef.child(`news/pic/${file.name}`).put(file);
+        var uploadTask = storageRef.child(`headlines/pic/${file.name}`).put(file);
 
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
             (snapshot) =>{
