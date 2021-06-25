@@ -178,7 +178,7 @@ var firebaseConfig = {
 
 
 
-export default function AddVideoNews() {
+export default function AddHeading() {
 
     
     
@@ -188,12 +188,7 @@ export default function AddVideoNews() {
         getSuggestedTopic()
         getPartners()
 
-
     }, [])
-    
-
-    const [coretheme, setcoretheme] = useState('');
-    const [suggtheme, setsuggtheme] = useState('');
 
     const [partners, setpartners] = useState('');
     
@@ -204,6 +199,12 @@ export default function AddVideoNews() {
         setpartners(Object.values(snap))
     })
     }
+
+
+    const [coretheme, setcoretheme] = useState('');
+    const [suggtheme, setsuggtheme] = useState('');
+
+
     const getCoreTheme = () => {
         firebase.database().ref('/theme').on( 'value' , snapshot => {
             const snap = snapshot.val();
@@ -245,7 +246,7 @@ export default function AddVideoNews() {
         let file = logo;
         var storage = firebase.storage();
         var storageRef = storage.ref();
-        var uploadTask = storageRef.child(`news/video/${file.name}`).put(file);
+        var uploadTask = storageRef.child(`headlines/pic/${file.name}`).put(file);
 
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
             (snapshot) =>{
@@ -270,7 +271,7 @@ export default function AddVideoNews() {
         const id = uuidv4();
         firebase.database().ref(`/news/${id}`).set({
             id,
-            type:'video',
+            type:'news',
             time:Date.now(),
             opnion:[],
             newsTitle: thmeTitle,
@@ -279,7 +280,9 @@ export default function AddVideoNews() {
             category: agee,
             suggested: ageee,
             pic:logourl,
-            url:url
+            url:url,
+            from:page,
+            location:ageeo
         }).then(() => {
             setthmeTitle('')
             setthmeTitle1('')
@@ -290,6 +293,7 @@ export default function AddVideoNews() {
             seturl('')
             setAgee('')
             setAgeee('')
+            setAgeeo('')
             setpAge('')
 
             return <Alert severity="warning">Uploaded</Alert>
@@ -310,15 +314,19 @@ export default function AddVideoNews() {
     }
 
 
-    const [popene, setpopene] = useState(false)
 
     const [opene, setopene] = useState(false)
+    const [popene, setpopene] = useState(false)
+
+    const [oopenee, setoopenee] = useState(false)
     const [openee, setopenee] = useState(false)
     const [openeee, setopeneee] = useState(false)
     const [age, setAge] = useState('');
+    const [page, setpAge] = useState('');
+
     const [agee, setAgee] = useState('');
     const [ageee, setAgeee] = useState('');
-    const [page, setpAge] = useState('');
+    const [ageeo, setAgeeo] = useState('');
 
     const [url, seturl] = useState('');
     const handleChange1 = (event) => {
@@ -328,13 +336,33 @@ export default function AddVideoNews() {
       const handleClose1 = () => {
         setopene(false);
       };
-
+        
+      const phandleClose1 = () => {
+        setpopene(false);
+      };
+      const handleChange2o = (event) => {
+        setAgeeo(event.target.value);
+      };
+      const handleClose2o = () => {
+        setoopenee(false);
+      };
+      const phandleChange1 = (event) => {
+        setpAge(event.target.value);
+      };
+       
+      const handleOpen2o = () => {
+        setoopenee(true);
+      };
       const handleURL = (e) => {
         seturl(e.target.value)
       }
     
       const handleOpen1 = () => {
         setopene(true);
+      };
+      
+      const phandleOpen1 = () => {
+        setpopene(true);
       };
       const handleChange2 = (event) => {
         setAgee(event.target.value);
@@ -357,15 +385,6 @@ export default function AddVideoNews() {
     
       const handleOpen3 = () => {
         setopeneee(true);
-      };
-      const phandleClose1 = () => {
-        setpopene(false);
-      };
-const phandleChange1 = (event) => {
-        setpAge(event.target.value);
-      };
-const phandleOpen1 = () => {
-        setpopene(true);
       };
 
   const classes = useStyles();
@@ -397,7 +416,7 @@ const phandleOpen1 = () => {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Video News
+            News
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -585,7 +604,7 @@ const phandleOpen1 = () => {
 <div>
 <Form>
 <Form.Group>
-<Form.File type="file" id="file" label="Upload the Video - Video Length should be 30sec" onChange={handleThemeLogo}/>
+<Form.File type="file" id="file" label="Upload the logo for Topic" onChange={handleThemeLogo}/>
 </Form.Group>
 </Form>
 <Button variant="contained" color="secondary" onClick={uploadPic}>
@@ -608,6 +627,66 @@ Upload
 }
 
 </div>
+
+<div className={classes.root} style={{marginTop:100,marginLeft:500}}>
+        <FormControl className={classes.formControl}>
+                    <div className={classes.root} component="h2">
+                    Add Location
+                    </div> 
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={oopenee}
+          onClose={handleClose2o}
+          onOpen={handleOpen2o}
+          value={ageeo}
+          onChange={handleChange2o}
+        >
+             <MenuItem value="all">
+            All Location
+          </MenuItem>
+
+<MenuItem value="Theni">Theni</MenuItem>
+<MenuItem value="Coimbatore">Coimbatore</MenuItem>
+<MenuItem value="Ariyalur">Ariyalur</MenuItem>
+<MenuItem value="Chengalpattu">Chengalpattu</MenuItem>
+<MenuItem value="Chennai">Chennai</MenuItem>
+<MenuItem value="Cuddalore">Cuddalore</MenuItem>
+<MenuItem value="Dharmapuri">Dharmapuri</MenuItem>
+<MenuItem value="Dindigul">Dindigul</MenuItem>
+<MenuItem value="Erode">Erode</MenuItem>
+<MenuItem value="Kallakurichi">Kallakurichi</MenuItem>
+<MenuItem value="Kanchipuram">Kanchipuram</MenuItem>
+<MenuItem value="Kanyakumari">Kanyakumari</MenuItem>
+<MenuItem value="Karur">Karur</MenuItem>
+<MenuItem value="Krishnagiri">Krishnagiri</MenuItem>
+<MenuItem value="Madurai">Madurai</MenuItem>
+<MenuItem value="Nagapattinam">Nagapattinam</MenuItem>
+<MenuItem value="Namakkal">Namakkal</MenuItem>
+<MenuItem value="Nilgiris">Nilgiris</MenuItem>
+<MenuItem value="Perambalur">Perambalur</MenuItem>
+<MenuItem value="Pudukkottai">Pudukkottai</MenuItem>
+<MenuItem value="Ramanathapuram">Ramanathapuram</MenuItem>
+<MenuItem value="Ranipet">Ranipet</MenuItem>
+<MenuItem value="Salem">Salem</MenuItem>
+<MenuItem value="Sivaganga">Sivaganga</MenuItem>
+<MenuItem value="Tenkasi">Tenkasi</MenuItem>
+<MenuItem value="Tuticorin">Tuticorin</MenuItem>
+<MenuItem value="Thanjavur">Thanjavur</MenuItem>
+<MenuItem value="Tirupathur">Tirupathur</MenuItem>
+<MenuItem value="Tiruchirappalli">Tiruchirappalli</MenuItem>
+<MenuItem value="Tenkasi">Tenkasi</MenuItem>
+<MenuItem value="Tiruvallur">Tiruvallur</MenuItem>
+<MenuItem value="Tiruvannamalai">Tiruvannamalai</MenuItem>
+<MenuItem value="Tiruvarur">Tiruvarur</MenuItem>
+<MenuItem value="Vellore">Vellore</MenuItem>
+<MenuItem value="Viluppuram">Viluppuram</MenuItem>
+<MenuItem value="Virudhunagar">Virudhunagar</MenuItem>
+
+         
+        </Select>
+      </FormControl>
+        </div>
                 </div>
                
         <TextField

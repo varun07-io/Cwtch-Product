@@ -26,6 +26,7 @@ const Routes = () => {
                     <Route exact path="/addquotes" component={AddQoutes}/>
                     <Route exact path="/addnews" component={AddNews}/>
                     <Route exact path="/addvnews" component={AddVideoNews}/>
+                    <Route exact path="/addheadings" component={AddVideoNews}/>
 
 
                     <Route exact path="/addads" component={AddAdvertisment}/>
