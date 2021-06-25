@@ -385,6 +385,14 @@ export default function AddTheme() {
 <ListItemText primary="Add Quotes" />
 </ListItem>
 </Link>
+<Link to="/addheadings">
+<ListItem button>
+<ListItemIcon>
+<DashboardIcon />
+</ListItemIcon>
+<ListItemText primary="Add Headings" />
+</ListItem>
+</Link>
 
         <Divider />
        
