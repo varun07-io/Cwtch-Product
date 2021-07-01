@@ -271,7 +271,7 @@ export default function AddHeading() {
         const id = uuidv4();
         firebase.database().ref(`/news/${id}`).set({
             id,
-            type:'news',
+            type:'heading',
             time:Date.now(),
             opnion:[],
             newsTitle: thmeTitle,
@@ -416,7 +416,7 @@ export default function AddHeading() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            News
+            Heading Section
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
