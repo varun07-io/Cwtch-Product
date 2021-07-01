@@ -416,7 +416,7 @@ export default function AddHeading() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            News
+            Heading Section
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
