@@ -271,7 +271,7 @@ export default function AddHeading() {
         const id = uuidv4();
         firebase.database().ref(`/news/${id}`).set({
             id,
-            type:'news',
+            type:'heading',
             time:Date.now(),
             opnion:[],
             newsTitle: thmeTitle,
