@@ -195,7 +195,7 @@ export default function Dashboard() {
 </ListItem>
 </Link>
 </List>
-<Link>
+<Link to="/addepisode">
 <List>
 
 <ListItem button>
@@ -207,14 +207,14 @@ export default function Dashboard() {
 </List>
 </Link>
 
-<Link>
+<Link to="/addcompanies">
 <List>
 
 <ListItem button>
 <ListItemIcon>
 <DashboardIcon />
 </ListItemIcon>
-<ListItemText primary="Add Companies" />
+<ListItemText primary="Add Companies" />  
 </ListItem>
 </List>
 </Link>
