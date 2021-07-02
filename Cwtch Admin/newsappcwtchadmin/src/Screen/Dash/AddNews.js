@@ -281,6 +281,7 @@ export default function AddNews() {
             suggested: ageee,
             pic:logourl,
             url:url,
+            polling,
             from:page,
             location:ageeo
         }).then(() => {
@@ -295,6 +296,8 @@ export default function AddNews() {
             setAgeee('')
             setAgeeo('')
             setpAge('')
+            setpolling('')
+            setIsPolling(false)
 
             return <Alert severity="warning">Uploaded</Alert>
         }).catch(err => {
@@ -329,6 +332,9 @@ export default function AddNews() {
     const [ageeo, setAgeeo] = useState('');
 
     const [url, seturl] = useState('');
+
+    const [polling, setpolling] = useState('');
+
     const handleChange1 = (event) => {
         setAge(event.target.value);
       };
@@ -355,6 +361,9 @@ export default function AddNews() {
       };
       const handleURL = (e) => {
         seturl(e.target.value)
+      }
+      const handlePolling = (e) => {
+        setpolling(e.target.value)
       }
     
       const handleOpen1 = () => {
@@ -397,7 +406,7 @@ export default function AddNews() {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-
+const [IsPolling, setIsPolling] = useState(false)
 
 
 
@@ -740,6 +749,42 @@ Upload
           variant="outlined"
         />
             </div>
+            <div style={{marginLeft:680,marginTop:60}}>
+            <Button variant="contained" color="primary"  onClick={() => 
+              {
+                const temp = IsPolling;
+                setIsPolling(!temp);
+                
+                }}>
+                Add Polling
+            </Button>
+            </div>
+            {IsPolling ? (
+ <div style={{marginLeft:100,marginTop:60}}>
+              <TextField
+              id="outlined-full-width"
+              label="Enter the Theme Title"
+              style={{ margin: 8,marginRight:500,marginLeft:200,marginTop:50 }}
+              placeholder="URL of the news"
+              helperText="Enter the URL"
+              fullWidth
+              margin="normal"
+              onChange={handlePolling}
+              value={polling}
+              InputLabelProps={{
+              shrink: true,
+              }}
+              variant="outlined"
+              />
+
+ </div>
+
+            ) : (
+null
+            )
+
+            }
+           
 
 
         <div style={{marginLeft:500,marginTop:60}}>
