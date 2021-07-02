@@ -281,7 +281,11 @@ export default function AddNews() {
             suggested: ageee,
             pic:logourl,
             url:url,
+
             polling,
+            yespoll:0,
+            nopoll:0,
+            
             from:page,
             location:ageeo
         }).then(() => {
